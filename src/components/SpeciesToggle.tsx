@@ -1,12 +1,11 @@
 
 import React from "react";
 import { Dog, Cat } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const SPECIES = [
-  { label: "강아지", icon: <Dog />, value: "dog" },
-  { label: "고양이", icon: <Cat />, value: "cat" },
+  { label: "강아지", icon: Dog },
+  { label: "고양이", icon: Cat },
 ];
 
 interface SpeciesToggleProps {
@@ -18,13 +17,14 @@ const SpeciesToggle = ({ selectedSpecies, setSelectedSpecies }: SpeciesTogglePro
   <div className="flex justify-center gap-3 mt-3 mb-2 w-full">
     {SPECIES.map((sp) => {
       const isActive = selectedSpecies === sp.label;
+      const Icon = sp.icon;
       return (
         <button
           key={sp.label}
           type="button"
           onClick={() => setSelectedSpecies(sp.label)}
           className={cn(
-            "flex items-center gap-2 px-7 py-2 rounded-full border-2 shadow-sm text-base font-bold transition-all duration-150",
+            "flex items-center gap-2 px-6 py-2 rounded-full border-2 shadow-sm text-base font-bold transition-all duration-150 min-w-[110px]",
             isActive
               ? "bg-blue-500 border-blue-500 text-white shadow-blue-100"
               : "bg-white border-gray-300 text-gray-400 hover:border-blue-300 hover:text-blue-500"
@@ -36,13 +36,13 @@ const SpeciesToggle = ({ selectedSpecies, setSelectedSpecies }: SpeciesTogglePro
         >
           <span 
             className={cn(
-              "transition-colors", 
+              "flex items-center justify-center min-w-[24px] transition-colors", 
               isActive ? "text-white" : "text-gray-300 group-hover:text-blue-400"
             )}
           >
-            {React.cloneElement(sp.icon, { size: 22 })}
+            <Icon size={22} />
           </span>
-          {sp.label}
+          <span className="block">{sp.label}</span>
         </button>
       );
     })}
@@ -50,3 +50,4 @@ const SpeciesToggle = ({ selectedSpecies, setSelectedSpecies }: SpeciesTogglePro
 );
 
 export default SpeciesToggle;
+

@@ -27,7 +27,8 @@ const SpeciesToggle = ({
           type="button"
           onClick={() => setSelectedSpecies(sp.label)}
           className={cn(
-            "flex items-center justify-center gap-2 min-w-[120px] h-12 px-4 rounded-full border-2 shadow-sm text-base font-bold transition-all duration-150",
+            // 버튼 크기, 내부 패딩, 폰트 완전 고정!
+            "flex items-center justify-center min-w-[132px] h-12 px-5 rounded-full border-2 shadow-sm text-base font-bold transition-all duration-150",
             isActive
               ? "bg-blue-500 border-blue-500 text-white shadow-blue-100"
               : "bg-white border-gray-300 text-gray-400 hover:border-blue-300 hover:text-blue-500"
@@ -41,17 +42,14 @@ const SpeciesToggle = ({
           <span
             className={cn(
               "flex items-center justify-center",
-              "w-6 h-6",
+              "w-6 h-6 mr-2",
               isActive ? "text-white" : "text-gray-300 group-hover:text-blue-400"
             )}
           >
             <Icon size={22} />
           </span>
           <span
-            className={cn(
-              "flex items-center justify-center",
-              "w-16 text-base font-bold truncate"
-            )}
+            className="block font-bold text-base leading-none text-center w-[52px]"
             style={{ letterSpacing: "-0.5px" }}
           >
             {sp.label}
@@ -63,4 +61,3 @@ const SpeciesToggle = ({
 );
 
 export default SpeciesToggle;
-

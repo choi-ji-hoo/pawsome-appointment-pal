@@ -70,16 +70,16 @@ const TreatmentDetail = () => {
           </div>
           {tab === "info" && (
             <div className="flex flex-col pt-4 pb-8">
-              {/* 진료 이미지 여러장 - 밑 텍스트 삭제 및 간격 최소화 */}
+              {/* 진료 이미지 여러장 - 하단 텍스트 완전 제거, 이미지만 표시 */}
               {INFO_IMAGES.map((url, idx) => (
                 <img
                   key={idx}
                   src={url}
-                  alt="" // 불필요한 alt/텍스트 제거
+                  alt="" // alt도 불필요하나 접근성 위해 비워둠
                   className="w-full max-h-72 object-cover"
                   style={{
                     borderRadius: 0,
-                    marginBottom: idx === INFO_IMAGES.length - 1 ? 0 : 8, // 마지막 이미지는 mb 0
+                    marginBottom: idx === INFO_IMAGES.length - 1 ? 0 : 8,
                   }}
                 />
               ))}

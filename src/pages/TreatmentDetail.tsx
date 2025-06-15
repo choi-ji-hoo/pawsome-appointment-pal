@@ -78,7 +78,7 @@ const TreatmentDetail = () => {
       <div className="flex items-center p-4 gap-2">
         <button
           aria-label="뒤로가기"
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/")}
           className="rounded-full hover:bg-gray-100 size-9 flex items-center justify-center"
         >
           <ArrowLeft size={22} />

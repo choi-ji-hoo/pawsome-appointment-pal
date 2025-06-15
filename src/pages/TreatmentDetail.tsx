@@ -314,27 +314,30 @@ const TreatmentDetail = () => {
 
       {/* 예약 Drawer */}
       <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
-        <DrawerContent>
-          <form onSubmit={handleNextStep} className="w-full max-w-md mx-auto min-h-[340px] flex flex-col">
-            <DrawerHeader>
-              <DrawerTitle>
+        <DrawerContent className="!rounded-t-2xl !pb-0 p-0 max-w-md w-full mx-auto">
+          <form
+            onSubmit={handleNextStep}
+            className="w-full max-w-md mx-auto min-h-[calc(100dvh*0.72)] h-[70dvh] flex flex-col bg-white"
+          >
+            <DrawerHeader className="pb-2 pt-5 px-0">
+              <DrawerTitle className="text-lg font-bold">
                 {step === 1 && "옵션 선택"}
                 {step === 2 && "날짜·시간 선택"}
                 {step === 3 && "보호자 정보 입력"}
                 {step === 4 && "예약 완료"}
               </DrawerTitle>
             </DrawerHeader>
-            <div className="flex-1 px-4 py-2">
+            <div className="flex-1 px-4 py-2 overflow-auto">
               {/* Step 1: 옵션 선택 */}
               {step === 1 && (
-                <div>
+                <div className="flex flex-col gap-1 mt-1">
                   <RadioGroup
                     value={option ?? undefined}
                     onValueChange={setOption}
-                    className="flex flex-col gap-3"
+                    className="flex flex-col gap-2"
                   >
                     {OPTIONS.map(op => (
-                      <label key={op} className="flex items-center space-x-3 cursor-pointer">
+                      <label key={op} className="flex items-center py-2 gap-3 text-base border rounded-lg px-4 cursor-pointer transition hover:bg-gray-100">
                         <RadioGroupItem value={op} id={op} />
                         <span>{op}</span>
                       </label>
@@ -346,25 +349,30 @@ const TreatmentDetail = () => {
               {step === 2 && (
                 <div className="space-y-4">
                   <div>
-                    <div className="font-semibold mb-2">원하는 날짜</div>
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      className="p-3 pointer-events-auto"
-                      fromDate={new Date()}
-                    />
+                    <div className="font-semibold text-base mb-2">원하는 날짜</div>
+                    <div className="bg-[#F8FAFC] p-2 rounded-xl flex justify-center">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        className="mx-auto pointer-events-auto"
+                        fromDate={new Date()}
+                      />
+                    </div>
                   </div>
                   <div>
-                    <div className="font-semibold mb-2">시간 선택</div>
+                    <div className="font-semibold text-base mb-2">시간 선택</div>
                     <div className="flex flex-wrap gap-2">
                       {TIMES.map((t) => (
                         <Button
                           key={t}
                           type="button"
-                          variant={time === t ? "default" : "outline"}
                           size="sm"
-                          className="rounded"
+                          className={`rounded-lg px-3 font-semibold min-w-[72px] ${
+                            time === t
+                              ? "bg-gray-900 text-white"
+                              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                          }`}
                           onClick={() => setTime(t)}
                         >
                           {t}
@@ -376,13 +384,15 @@ const TreatmentDetail = () => {
               )}
               {/* Step 3: 보호자 정보 입력 */}
               {step === 3 && (
-                <div className="space-y-4">
+                <div className="space-y-5 pt-0">
                   <div>
                     <label className="text-sm font-semibold block mb-1">보호자 이름</label>
                     <Input value={guardianName}
                       onChange={e => setGuardianName(e.target.value)}
                       required minLength={2} maxLength={10}
-                      placeholder="성함 입력" />
+                      placeholder="성함 입력"
+                      className="rounded-lg py-3 px-4 text-base"
+                    />
                   </div>
                   <div>
                     <label className="text-sm font-semibold block mb-1">보호자 전화번호</label>
@@ -391,31 +401,37 @@ const TreatmentDetail = () => {
                       value={guardianPhone}
                       onChange={e => setGuardianPhone(e.target.value)}
                       required
-                      pattern="^01[0-9]-\d{3,4}-\d{4}$" />
+                      pattern="^01[0-9]-\d{3,4}-\d{4}$"
+                      className="rounded-lg py-3 px-4 text-base"
+                    />
                   </div>
                   <div>
                     <label className="text-sm font-semibold block mb-1">반려동물 이름</label>
                     <Input value={petName}
                       onChange={e => setPetName(e.target.value)}
                       required minLength={1} maxLength={12}
-                      placeholder="예) 초코" />
+                      placeholder="예) 초코"
+                      className="rounded-lg py-3 px-4 text-base"
+                    />
                   </div>
                 </div>
               )}
               {/* Step 4: 신청 완료 */}
               {step === 4 && (
-                <div className="flex flex-col items-center justify-center h-60 gap-4">
+                <div className="flex flex-col items-center justify-center h-60 gap-5">
                   <div className="text-3xl">🎉</div>
                   <div className="font-bold text-lg text-center">예약이 완료되었습니다!</div>
-                  <div className="text-gray-500 text-center">예약 내역은 <span className="font-semibold text-blue-700">예약현황</span>에서 확인할 수 있습니다.</div>
+                  <div className="text-gray-500 text-center text-base">
+                    예약 내역은 <span className="font-semibold text-blue-700">예약현황</span>에서 확인할 수 있습니다.
+                  </div>
                 </div>
               )}
             </div>
-            <DrawerFooter>
+            <DrawerFooter className="!mt-auto !pb-5 gap-2 px-4">
               {step !== 4 && (
                 <Button
                   type="submit"
-                  className="w-full font-bold"
+                  className="w-full h-12 font-bold rounded-xl text-base"
                   disabled={
                     (step === 1 && !option) ||
                     (step === 2 && (!date || !time)) ||
@@ -427,18 +443,23 @@ const TreatmentDetail = () => {
                 </Button>
               )}
               {step === 4 ? (
-                <Button className="w-full font-bold" type="button" onClick={handleToStatus}>
+                <Button className="w-full h-12 font-bold rounded-xl text-base" type="button" onClick={handleToStatus}>
                   예약현황으로 이동
                 </Button>
               ) : (
                 step > 1 && (
-                  <Button variant="outline" type="button" className="w-full" onClick={() => setStep(step - 1)}>
+                  <Button
+                    variant="outline"
+                    type="button"
+                    className="w-full h-12 rounded-xl text-base"
+                    onClick={() => setStep(step - 1)}
+                  >
                     이전
                   </Button>
                 )
               )}
               <DrawerClose asChild>
-                <Button variant="ghost" type="button" className="w-full">닫기</Button>
+                <Button variant="ghost" type="button" className="w-full h-12 rounded-xl text-base">닫기</Button>
               </DrawerClose>
             </DrawerFooter>
           </form>

@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { Dog, Cat, Calendar, Syringe, HeartPulse, Bone } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -164,7 +163,7 @@ const Index = () => {
             </div>
             <div className="text-xs text-gray-400">{filteredTreatments.length}개</div>
           </div>
-          <ul className="flex flex-col gap-3">
+          <ul className="flex flex-col gap-4">
             {filteredTreatments.length === 0 ? (
               <li className="text-center text-gray-400 py-8 text-base">해당 동물의 진료가 없습니다.</li>
             ) : (
@@ -177,24 +176,41 @@ const Index = () => {
                 .map((treat) => (
                   <li
                     key={treat.id}
-                    className="flex bg-white rounded-xl shadow items-center gap-4 p-3 border border-gray-100 hover:scale-[1.01] transition cursor-pointer font-sans"
+                    className="bg-white rounded-2xl shadow border border-gray-100 p-0 overflow-hidden cursor-pointer hover:scale-[1.01] transition group"
+                    style={{ minHeight: 230, maxWidth: 420 }}
                     onClick={() => navigate(`/treatment/${treat.id}`)}
                   >
-                    <div className="flex-shrink-0">
+                    {/* 진료 썸네일 */}
+                    <div className="w-full h-36 bg-gray-50 overflow-hidden flex items-center justify-center">
                       <img
                         src={treat.thumbnail}
                         alt={treat.name}
-                        className="w-14 h-14 rounded-lg object-cover border border-blue-100 bg-gray-50"
+                        className="w-full h-full object-cover object-center rounded-none"
+                        style={{ maxHeight: 144 }}
                       />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="font-bold text-blue-700 truncate font-sans">{treat.name}</div>
-                      <div className="text-xs mt-1 text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis font-sans">
-                        {treat.items.join(" · ")}
+                    {/* 병원명/주소 부분 */}
+                    <div className="flex items-center gap-2 px-4 mt-3">
+                      <img
+                        src="https://images.unsplash.com/photo-1466721591366-2d5fba72006d?auto=format&fit=facearea&w=48&h=48"
+                        alt="병원 썸네일"
+                        className="w-8 h-8 rounded-full border bg-gray-100 object-cover"
+                      />
+                      <div className="flex flex-col min-w-0 flex-1">
+                        <div className="font-bold text-gray-900 text-sm truncate">후디 동물병원</div>
+                        <div className="text-xs text-gray-400 truncate">울산 남구</div>
                       </div>
-                      <div className="text-xs mt-1 text-blue-500 font-medium flex items-center gap-1 font-sans">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-                        {treat.hours}
+                      <span className="ml-auto text-gray-300">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" className="inline">{/*→*/}<polyline points="9 18 15 12 9 6" /></svg>
+                      </span>
+                    </div>
+                    {/* 진료명, 가격, 평점 */}
+                    <div className="px-4 pb-4 pt-2">
+                      <div className="font-bold text-base text-neutral-900 mt-1">{treat.name}</div>
+                      <div className="text-xl font-extrabold text-gray-900 mt-1">500,000원</div>
+                      <div className="flex items-center gap-1 mt-1">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#FACC15" stroke="#FACC15" strokeWidth="2" className="mr-0.5"><polygon points="12 2 15 8.7 22 9.3 17 14.1 18.3 21 12 17.7 5.7 21 7 14.1 2 9.3 9 8.7 12 2"/></svg>
+                        <span className="font-semibold text-sm text-gray-700">5.0</span>
                       </div>
                     </div>
                   </li>

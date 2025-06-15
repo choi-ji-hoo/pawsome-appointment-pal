@@ -45,10 +45,7 @@ const TreatmentDetail = () => {
         <div className="px-4">
           <div className="font-bold text-lg mt-4 mb-1">{treatment.name}</div>
           <div className="text-xl font-extrabold mb-2">{treatment.price}</div>
-          <div className="flex items-center gap-1 text-yellow-500 mb-3">
-            <Star fill="#FACC15" stroke="#FACC15" size={16} className="mr-0.5" />
-            <span className="text-base font-semibold text-gray-700">{MOCK_HOSPITAL.rating}</span>
-          </div>
+          {/* 별점(평점) 영역 제거 */}
           {/* 탭 UI */}
           <div className="flex border-b border-gray-200 my-2">
             {TABS.map(t => (

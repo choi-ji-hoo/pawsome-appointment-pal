@@ -77,6 +77,21 @@ const INFO_IMAGES = [
 const placeholderAvatar =
   "https://api.dicebear.com/8.x/thumbs/svg?seed=Milo&backgroundType=gradientLinear";
 
+const formatPhoneNumber = (input: string) => {
+  // 숫자만 남김
+  const digits = input.replace(/\D/g, "");
+  // 01X-XXXX-XXXX, 01X-XXX-XXXX, 010-XXXX-XXXX
+  if (digits.length < 4) return digits;
+  if (digits.length < 8) {
+    return digits.replace(/(\d{3})(\d{1,4})/, "$1-$2");
+  }
+  if (digits.length <= 11) {
+    return digits.replace(/(\d{3})(\d{3,4})(\d{1,4})/, "$1-$2-$3").slice(0, 13);
+  }
+  // 만약 11자리초과 입력시 앞 11자리까지만
+  return digits.slice(0, 11).replace(/(\d{3})(\d{3,4})(\d{1,4})/, "$1-$2-$3");
+};
+
 const TreatmentDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -507,10 +522,15 @@ const TreatmentDetail = () => {
                     </div>
                     <div>
                       <label className="text-sm font-semibold block mb-1 text-gray-700">보호자 전화번호</label>
-                      <Input type="tel" inputMode="tel"
+                      <Input
+                        type="tel"
+                        inputMode="tel"
                         placeholder="010-0000-0000"
                         value={guardianPhone}
-                        onChange={e => setGuardianPhone(e.target.value)}
+                        onChange={e => {
+                          const formatted = formatPhoneNumber(e.target.value);
+                          setGuardianPhone(formatted);
+                        }}
                         required
                         pattern="^01[0-9]-\d{3,4}-\d{4}$"
                         className="rounded-lg py-3 px-4 text-base border-gray-200 focus:ring-2 focus:ring-gray-900"

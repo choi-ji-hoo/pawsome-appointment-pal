@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { Dog, Cat, Calendar, Syringe, HeartPulse, Bone } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -211,7 +210,7 @@ const Index = () => {
                       </div>
                       {/* 진료 가격/평점 등 하단 */}
                       <div className="flex items-center justify-between mt-3">
-                        <span className="text-xl font-extrabold text-blue-900">{treat.price ? treat.price : "500,000원"}</span>
+                        <span className="text-xl font-extrabold text-blue-900">500,000원</span>
                         <span className="flex items-center gap-1">
                           <svg width="16" height="16" viewBox="0 0 24 24" fill="#FACC15" stroke="#FACC15" strokeWidth="2" className="mr-0.5"><polygon points="12 2 15 8.7 22 9.3 17 14.1 18.3 21 12 17.7 5.7 21 7 14.1 2 9.3 9 8.7 12 2"/></svg>
                           <span className="font-semibold text-base text-gray-700">5.0</span>

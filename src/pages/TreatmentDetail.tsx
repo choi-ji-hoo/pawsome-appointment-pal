@@ -1,6 +1,11 @@
 import * as React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter, DrawerClose } from "@/components/ui/drawer";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Input } from "@/components/ui/input";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
 import { Star } from "lucide-react";
 
 // Mock 데이터 동일
@@ -77,6 +82,47 @@ const TreatmentDetail = () => {
   const navigate = useNavigate();
   const [tab, setTab] = React.useState<"info" | "review">("info");
   const treatment = TREATMENTS.find(t => t.id === Number(id)) || TREATMENTS[0];
+
+  // 예약 Drawer 관련 상태
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [step, setStep] = React.useState(1);
+
+  // 옵션 선택
+  const [option, setOption] = React.useState<string | null>(null);
+  // 날짜/시간 선택
+  const [date, setDate] = React.useState<Date | undefined>();
+  const [time, setTime] = React.useState<string>("");
+  // 보호자 정보
+  const [guardianName, setGuardianName] = React.useState("");
+  const [guardianPhone, setGuardianPhone] = React.useState("");
+  const [petName, setPetName] = React.useState("");
+
+  // 예시 옵션 (수의사/패키지 등 간단한 radio로)
+  const OPTIONS = ["일반검진", "프리미엄검진"];
+
+  // 시간 예시 (09:00~18:00, 30분 단위)
+  const TIMES = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30", "18:00"];
+
+  // 예약 완료 처리: 확인 누르면 예약현황 페이지로 이동
+  function handleToStatus() {
+    setDrawerOpen(false);
+    setTimeout(() => {
+      navigate("/status");
+    }, 350);
+  }
+
+  // Drawer에서 스텝 이동 시 서브밋 핸들러
+  function handleNextStep(e: React.FormEvent) {
+    e.preventDefault();
+    setStep(step + 1);
+  }
+
+  React.useEffect(() => {
+    if (!drawerOpen) {
+      // 초기화(뒤로가기/닫기 시)
+      setStep(1); setOption(null); setDate(undefined); setTime(""); setGuardianName(""); setGuardianPhone(""); setPetName("");
+    }
+  }, [drawerOpen]);
 
   // 메인 색상/테마
   const mainColor = "text-green-900";
@@ -260,10 +306,144 @@ const TreatmentDetail = () => {
       </div>
       {/* 예약 버튼 (Fixed Bottom) */}
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md p-4 bg-white border-t z-10">
-        <Button className="w-full h-12 text-base font-bold rounded-xl bg-gray-900 hover:bg-gray-700">
+        <Button className="w-full h-12 text-base font-bold rounded-xl bg-gray-900 hover:bg-gray-700"
+          onClick={() => setDrawerOpen(true)}>
           예약하기
         </Button>
       </div>
+
+      {/* 예약 Drawer */}
+      <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+        <DrawerContent>
+          <form onSubmit={handleNextStep} className="w-full max-w-md mx-auto min-h-[340px] flex flex-col">
+            <DrawerHeader>
+              <DrawerTitle>
+                {step === 1 && "옵션 선택"}
+                {step === 2 && "날짜·시간 선택"}
+                {step === 3 && "보호자 정보 입력"}
+                {step === 4 && "예약 완료"}
+              </DrawerTitle>
+            </DrawerHeader>
+            <div className="flex-1 px-4 py-2">
+              {/* Step 1: 옵션 선택 */}
+              {step === 1 && (
+                <div>
+                  <RadioGroup
+                    value={option ?? undefined}
+                    onValueChange={setOption}
+                    className="flex flex-col gap-3"
+                  >
+                    {OPTIONS.map(op => (
+                      <label key={op} className="flex items-center space-x-3 cursor-pointer">
+                        <RadioGroupItem value={op} id={op} />
+                        <span>{op}</span>
+                      </label>
+                    ))}
+                  </RadioGroup>
+                </div>
+              )}
+              {/* Step 2: 날짜/시간 선택 */}
+              {step === 2 && (
+                <div className="space-y-4">
+                  <div>
+                    <div className="font-semibold mb-2">원하는 날짜</div>
+                    <Calendar
+                      mode="single"
+                      selected={date}
+                      onSelect={setDate}
+                      className="p-3 pointer-events-auto"
+                      fromDate={new Date()}
+                    />
+                  </div>
+                  <div>
+                    <div className="font-semibold mb-2">시간 선택</div>
+                    <div className="flex flex-wrap gap-2">
+                      {TIMES.map((t) => (
+                        <Button
+                          key={t}
+                          type="button"
+                          variant={time === t ? "default" : "outline"}
+                          size="sm"
+                          className="rounded"
+                          onClick={() => setTime(t)}
+                        >
+                          {t}
+                        </Button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+              {/* Step 3: 보호자 정보 입력 */}
+              {step === 3 && (
+                <div className="space-y-4">
+                  <div>
+                    <label className="text-sm font-semibold block mb-1">보호자 이름</label>
+                    <Input value={guardianName}
+                      onChange={e => setGuardianName(e.target.value)}
+                      required minLength={2} maxLength={10}
+                      placeholder="성함 입력" />
+                  </div>
+                  <div>
+                    <label className="text-sm font-semibold block mb-1">보호자 전화번호</label>
+                    <Input type="tel" inputMode="tel"
+                      placeholder="010-0000-0000"
+                      value={guardianPhone}
+                      onChange={e => setGuardianPhone(e.target.value)}
+                      required
+                      pattern="^01[0-9]-\d{3,4}-\d{4}$" />
+                  </div>
+                  <div>
+                    <label className="text-sm font-semibold block mb-1">반려동물 이름</label>
+                    <Input value={petName}
+                      onChange={e => setPetName(e.target.value)}
+                      required minLength={1} maxLength={12}
+                      placeholder="예) 초코" />
+                  </div>
+                </div>
+              )}
+              {/* Step 4: 신청 완료 */}
+              {step === 4 && (
+                <div className="flex flex-col items-center justify-center h-60 gap-4">
+                  <div className="text-3xl">🎉</div>
+                  <div className="font-bold text-lg text-center">예약이 완료되었습니다!</div>
+                  <div className="text-gray-500 text-center">예약 내역은 <span className="font-semibold text-blue-700">예약현황</span>에서 확인할 수 있습니다.</div>
+                </div>
+              )}
+            </div>
+            <DrawerFooter>
+              {step !== 4 && (
+                <Button
+                  type="submit"
+                  className="w-full font-bold"
+                  disabled={
+                    (step === 1 && !option) ||
+                    (step === 2 && (!date || !time)) ||
+                    (step === 3 &&
+                      (!guardianName || !guardianPhone.match(/^01[0-9]-\d{3,4}-\d{4}$/) || !petName))
+                  }
+                >
+                  다음
+                </Button>
+              )}
+              {step === 4 ? (
+                <Button className="w-full font-bold" type="button" onClick={handleToStatus}>
+                  예약현황으로 이동
+                </Button>
+              ) : (
+                step > 1 && (
+                  <Button variant="outline" type="button" className="w-full" onClick={() => setStep(step - 1)}>
+                    이전
+                  </Button>
+                )
+              )}
+              <DrawerClose asChild>
+                <Button variant="ghost" type="button" className="w-full">닫기</Button>
+              </DrawerClose>
+            </DrawerFooter>
+          </form>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 };

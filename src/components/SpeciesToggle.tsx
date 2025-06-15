@@ -17,7 +17,7 @@ const SpeciesToggle = ({
   setSelectedSpecies,
 }: SpeciesToggleProps) => (
   <div className="flex justify-center mt-3 mb-2 w-full">
-    <div className="flex w-full max-w-[380px] bg-[#f7f8fa] rounded-[28px] py-2 px-2 gap-2">
+    <div className="flex w-full max-w-[380px] bg-[#f4f7fa] rounded-full py-1 px-2 gap-2 shadow-none">
       {SPECIES.map((sp) => {
         const isActive = selectedSpecies === sp.label;
         return (
@@ -26,14 +26,19 @@ const SpeciesToggle = ({
             type="button"
             onClick={() => setSelectedSpecies(sp.label)}
             className={cn(
-              "flex-1 rounded-[24px] px-0 py-3 text-base font-bold transition-all text-center",
+              "flex-1 rounded-full px-0 py-3 text-base font-bold text-center transition-all duration-200",
               isActive
-                ? "bg-white text-gray-900 shadow-[0_2px_8px_rgba(0,0,0,0.04)]"
-                : "bg-transparent text-gray-400"
+                ? "bg-blue-600 text-white shadow-none"
+                : "bg-[#eaeaea] text-[#9a9a9a] hover:text-blue-600"
             )}
             style={{
               minWidth: 0,
-              boxShadow: isActive ? "0 2px 8px rgba(0,0,0,0.04)" : undefined,
+              height: 44,
+              boxShadow: "none",
+              fontWeight: 700,
+              letterSpacing: "-0.5px",
+              fontSize: 18,
+              border: "none",
             }}
           >
             {sp.label}

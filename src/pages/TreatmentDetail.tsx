@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Star } from "lucide-react";
@@ -16,9 +15,9 @@ const TreatmentDetail = () => {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
   return (
-    <div className="relative min-h-screen max-w-md mx-auto bg-white pb-28">
+    <div className="relative min-h-screen max-w-md w-full mx-auto bg-white pb-28">
       {/* Top Header */}
-      <div className="flex items-center p-4 gap-2">
+      <div className="flex items-center p-3 gap-2">
         <button
           aria-label="뒤로가기"
           onClick={() => navigate("/")}
@@ -29,14 +28,13 @@ const TreatmentDetail = () => {
         </button>
       </div>
 
-      {/* 전체 스크롤 영역 래퍼 */}
-      <div className="px-4" style={{ maxHeight: "calc(100vh - 110px)", overflowY: "auto" }}>
+      <div className="px-0" style={{ maxHeight: "calc(100vh - 76px)", overflowY: "auto" }}>
         {/* 썸네일 */}
         <div className="relative overflow-hidden mb-2">
           <img
             src={MOCK_HOSPITAL.thumbnail}
             alt={MOCK_HOSPITAL.name}
-            className="w-full h-[156px] object-cover"
+            className="w-full h-[164px] object-cover"
             style={{ borderRadius: 0 }}
           />
         </div>
@@ -44,12 +42,11 @@ const TreatmentDetail = () => {
         <HospitalInfoCard hospital={MOCK_HOSPITAL} onClick={() => navigate("/hospital/1")} />
 
         {/* 메인 내용 */}
-        <div>
-          {/* 진료명 및 금액 */}
-          <div className="font-bold text-xl mt-5 mb-1">{treatment.name}</div>
-          <div className="text-2xl font-extrabold mb-2">{treatment.price}</div>
+        <div className="px-4">
+          <div className="font-bold text-lg mt-4 mb-1">{treatment.name}</div>
+          <div className="text-xl font-extrabold mb-2">{treatment.price}</div>
           <div className="flex items-center gap-1 text-yellow-500 mb-3">
-            <Star fill="#FACC15" stroke="#FACC15" size={18} className="mr-0.5" />
+            <Star fill="#FACC15" stroke="#FACC15" size={16} className="mr-0.5" />
             <span className="text-base font-semibold text-gray-700">{MOCK_HOSPITAL.rating}</span>
           </div>
           {/* 탭 UI */}
@@ -61,7 +58,7 @@ const TreatmentDetail = () => {
                   tab === t.value
                     ? "border-gray-900 text-gray-900"
                     : "border-transparent text-gray-400"
-                }`}
+                } text-sm`}
                 onClick={() => setTab(t.value as "info" | "review")}
               >
                 {t.label}
@@ -69,22 +66,24 @@ const TreatmentDetail = () => {
             ))}
           </div>
           {tab === "info" && (
-            <div className="flex flex-col pt-4 pb-8">
+            <div className="flex flex-col pt-3 pb-8">
               {INFO_IMAGES.map((url, idx) => (
                 <img
                   key={idx}
                   src={url}
                   alt=""
-                  className="w-full max-h-72 object-cover"
+                  className="w-full h-auto object-cover"
                   style={{
                     borderRadius: 0,
-                    marginBottom: 0, // 여백 완전히 제거
+                    marginBottom: 0,
+                    // 이미지간 겹침 없이 margin 0, 모바일 밀착 느낌
+                    display: "block",
                   }}
+                  draggable={false}
                 />
               ))}
             </div>
           )}
-          {/* 후기 탭 */}
           {tab === "review" && (
             <ReviewList reviews={treatment.reviews} treatmentName={treatment.name} />
           )}
@@ -92,7 +91,7 @@ const TreatmentDetail = () => {
       </div>
 
       {/* 예약 버튼 (Fixed Bottom) */}
-      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md p-4 bg-white border-t z-10">
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md p-3 bg-white border-t z-10">
         <button
           className="w-full h-12 text-base font-bold rounded-xl bg-gray-900 hover:bg-gray-700 text-white"
           onClick={() => setDrawerOpen(true)}
@@ -111,4 +110,3 @@ const TreatmentDetail = () => {
 };
 
 export default TreatmentDetail;
-

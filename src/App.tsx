@@ -12,10 +12,10 @@ const queryClient = new QueryClient();
 
 const MainLayout = () => {
   return (
+    // 모바일: max-w-md의 가운데 정렬, 아주 얇은 padding만 적용
     <div className="min-h-screen w-full bg-gray-50 flex flex-col">
-      {/* Centered fixed-width layout for content */}
       <div className="flex-1 flex flex-col items-center justify-start">
-        <div className="w-full max-w-5xl flex flex-col flex-1 px-8 py-8 gap-2">
+        <div className="w-full max-w-md bg-white flex flex-col flex-1 px-0 py-0">
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/treatment/:id" element={<TreatmentDetail />} />
@@ -24,7 +24,7 @@ const MainLayout = () => {
           </Routes>
         </div>
       </div>
-      {/* TabsBar removed */}
+      {/* 모바일에선 TabsBar 등은 필요없음 */}
     </div>
   );
 };

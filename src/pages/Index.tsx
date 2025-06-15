@@ -94,17 +94,18 @@ const Banner = () => (
 );
 
 const FunnnelSection = () => (
-  <div className="flex justify-between gap-2 mt-5 mb-2 px-1">
+  <div className="grid grid-cols-4 gap-2 mt-3 px-2">
     {FUNNELS.map((fun) => (
       <Button
         key={fun.value}
         type="button"
         variant="outline"
-        className="flex-1 flex flex-col items-center py-4 bg-white rounded-xl shadow group hover:bg-blue-50 transition-all border border-gray-100"
-        onClick={() => {}} // TODO: 연결된 기능이 있다면 여기서 처리
+        className="flex flex-col items-center justify-center py-3 px-0 bg-white rounded-xl border border-gray-100 shadow-sm hover:bg-blue-50 transition-all"
+        onClick={() => {}}
+        style={{minWidth: 0}}
       >
-        <div className="mb-1 group-hover:scale-110 transition-transform">{fun.icon}</div>
-        <span className="text-xs text-gray-700 font-semibold">{fun.label}</span>
+        <div className="mb-1">{fun.icon}</div>
+        <span className="text-xs text-gray-800 font-semibold whitespace-nowrap">{fun.label}</span>
       </Button>
     ))}
   </div>
@@ -121,17 +122,17 @@ const Index = () => {
   );
 
   return (
-    <div className="bg-white min-h-screen max-w-2xl mx-auto flex flex-col relative pb-20">
-      <header className="w-full px-4 pt-8 pb-2">
+    <div className="bg-gradient-to-b from-blue-50 via-stone-50 to-white min-h-screen max-w-md mx-auto flex flex-col relative pb-20">
+      <header className="w-full pt-6 pb-0 px-4 flex flex-col gap-4">
         {/* 검색창 */}
-        <div className="relative">
+        <div className="relative w-full">
           <Input
             placeholder="진료명, 항목명으로 검색"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-10"
+            className="pl-10 bg-white rounded-lg border border-gray-100 shadow focus:ring-blue-300"
           />
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300 pointer-events-none">
             <svg
               width="18"
               height="18"
@@ -146,20 +147,24 @@ const Index = () => {
             </svg>
           </span>
         </div>
-        {/* 베너 (자동 슬라이드 캐러셀) */}
-        <BannerCarousel />
+        {/* 베너 (슬라이드 캐러셀) */}
+        <div className="mt-0">
+          <BannerCarousel />
+        </div>
         {/* 퍼널 카테고리 */}
         <FunnnelSection />
         {/* 강아지/고양이 토글 */}
-        <div className="flex justify-center gap-3 mt-4">
+        <div className="flex justify-center gap-3 mt-3">
           {SPECIES.map((sp) => (
             <Button
               key={sp.label}
               type="button"
               variant={selectedSpecies === sp.label ? "default" : "outline"}
               className={cn(
-                "flex-1 font-semibold transition-all px-4 py-2 text-base",
-                selectedSpecies === sp.label ? "ring-2 ring-primary" : ""
+                "flex-1 font-bold transition-all px-4 py-2 text-base rounded-full border-2",
+                selectedSpecies === sp.label
+                  ? "ring-2 ring-blue-400 bg-blue-50 border-blue-200 text-blue-700"
+                  : "border-gray-200 bg-white hover:bg-gray-50 text-gray-500"
               )}
               onClick={() => setSelectedSpecies(sp.label)}
             >
@@ -170,8 +175,14 @@ const Index = () => {
         </div>
       </header>
       <main className="flex-1 w-full">
-        <section className="mt-6 mx-4 mb-28">
-          <ul className="flex flex-col gap-4">
+        <section className="mt-6 px-3 mb-28">
+          <div className="mb-3 flex items-end justify-between">
+            <div className="text-lg font-bold text-blue-900 tracking-tight">
+              {selectedSpecies} 진료 상품
+            </div>
+            <div className="text-xs text-gray-400">{filteredTreatments.length}개</div>
+          </div>
+          <ul className="flex flex-col gap-3">
             {filteredTreatments.length === 0 ? (
               <li className="text-center text-gray-400 py-8 text-base">해당 동물의 진료가 없습니다.</li>
             ) : (
@@ -184,14 +195,14 @@ const Index = () => {
                 .map((treat) => (
                   <li
                     key={treat.id}
-                    className="flex bg-white rounded-xl shadow-md items-center gap-4 p-3 border hover:scale-[1.01] transition cursor-pointer"
+                    className="flex bg-white rounded-xl shadow items-center gap-4 p-3 border border-gray-100 hover:scale-[1.01] transition cursor-pointer"
                     onClick={() => navigate(`/treatment/${treat.id}`)}
                   >
                     <div className="flex-shrink-0">
                       <img
                         src={treat.thumbnail}
                         alt={treat.name}
-                        className="w-16 h-16 rounded-lg object-cover border border-blue-100 bg-gray-50"
+                        className="w-14 h-14 rounded-lg object-cover border border-blue-100 bg-gray-50"
                       />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -199,10 +210,8 @@ const Index = () => {
                       <div className="text-xs mt-1 text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis">
                         {treat.items.join(" · ")}
                       </div>
-                      <div className="text-xs mt-1 text-blue-500 font-medium">
-                        <span className="inline-flex items-center mr-1">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mr-0.5 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-                        </span>
+                      <div className="text-xs mt-1 text-blue-500 font-medium flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
                         {treat.hours}
                       </div>
                     </div>

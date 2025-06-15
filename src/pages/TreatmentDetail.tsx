@@ -1,16 +1,17 @@
+
 import * as React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Star } from "lucide-react";
 import HospitalInfoCard from "@/components/HospitalInfoCard";
-import ReviewList from "@/components/ReviewList";
 import ReservationDrawer from "@/components/ReservationDrawer";
-import { TREATMENTS, MOCK_HOSPITAL, TABS, INFO_IMAGES } from "@/utils/constants";
+import { TREATMENTS, MOCK_HOSPITAL, INFO_IMAGES } from "@/utils/constants";
 
 // TreatmentDetail 메인 컴포넌트
 const TreatmentDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [tab, setTab] = React.useState<"info" | "review">("info");
+  // 탭 하나만 남기기
+  const [tab] = React.useState<"info">("info");
   const treatment = TREATMENTS.find(t => t.id === Number(id)) || TREATMENTS[0];
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
@@ -49,44 +50,43 @@ const TreatmentDetail = () => {
             <Star fill="#FACC15" stroke="#FACC15" size={16} className="mr-0.5" />
             <span className="text-base font-semibold text-gray-700">{MOCK_HOSPITAL.rating}</span>
           </div>
-          {/* 탭 UI */}
+          {/* 탭 UI는 하나만 (진료 정보) */}
           <div className="flex border-b border-gray-200 my-2">
-            {TABS.map(t => (
-              <button
-                key={t.value}
-                className={`flex-1 px-1 py-2 font-semibold text-center transition border-b-2 ${
-                  tab === t.value
-                    ? "border-gray-900 text-gray-900"
-                    : "border-transparent text-gray-400"
-                } text-sm`}
-                onClick={() => setTab(t.value as "info" | "review")}
-              >
-                {t.label}
-              </button>
-            ))}
+            <button
+              className="flex-1 px-1 py-2 font-semibold text-center text-gray-900 border-b-2 border-gray-900 text-sm"
+              disabled
+            >
+              진료 정보
+            </button>
           </div>
-          {tab === "info" && (
-            <div className="flex flex-col pt-3 pb-8">
-              {INFO_IMAGES.map((url, idx) => (
-                <img
-                  key={idx}
-                  src={url}
-                  alt=""
-                  className="w-full h-auto object-cover"
-                  style={{
-                    borderRadius: 0,
-                    marginBottom: 0,
-                    // 이미지간 겹침 없이 margin 0, 모바일 밀착 느낌
-                    display: "block",
-                  }}
-                  draggable={false}
-                />
-              ))}
+          {/* 진료 정보: 기존 INFO_IMAGES 아래 사용자 이미지 표시 */}
+          <div className="flex flex-col pt-3 pb-8">
+            {INFO_IMAGES.map((url, idx) => (
+              <img
+                key={idx}
+                src={url}
+                alt=""
+                className="w-full h-auto object-cover"
+                style={{
+                  borderRadius: 0,
+                  marginBottom: 0,
+                  // 이미지간 겹침 없이 margin 0, 모바일 밀착 느낌
+                  display: "block",
+                }}
+                draggable={false}
+              />
+            ))}
+            {/* 첨부 이미지 삽입 */}
+            <div className="flex justify-center my-6">
+              <img 
+                src="/lovable-uploads/9904435b-9a23-4fd8-8d9e-62805c113e40.png"
+                alt="hoodi 로고"
+                className="w-40 h-40 object-contain rounded-xl shadow bg-white"
+                style={{ borderRadius: 16, background: "#fff" }}
+                draggable={false}
+              />
             </div>
-          )}
-          {tab === "review" && (
-            <ReviewList reviews={treatment.reviews} treatmentName={treatment.name} />
-          )}
+          </div>
         </div>
       </div>
 
@@ -110,3 +110,4 @@ const TreatmentDetail = () => {
 };
 
 export default TreatmentDetail;
+

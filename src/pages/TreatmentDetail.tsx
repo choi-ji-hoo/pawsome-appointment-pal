@@ -64,8 +64,37 @@ const TreatmentDetail = () => {
             ))}
           </div>
           {tab === "info" && (
-            <div className="text-center text-gray-600 py-8">
-              후디 인스타에서 확인할 수 있습니다!
+            <div className="space-y-4">
+              {treatment.description && (
+                <div>
+                  <h3 className="font-semibold mb-2">진료 설명</h3>
+                  <div className="space-y-2">
+                    {treatment.description.map((desc, index) => (
+                      <p key={index} className="text-gray-700">{desc}</p>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {treatment.infoTab && (
+                <div>
+                  <h3 className="font-semibold mb-2">진료 안내</h3>
+                  <div className="space-y-2">
+                    {treatment.infoTab.map((info, index) => (
+                      <p key={index} className="text-gray-700">• {info}</p>
+                    ))}
+                  </div>
+                </div>
+              )}
+              <div className="grid grid-cols-2 gap-2 mt-4">
+                {INFO_IMAGES.slice(0, 4).map((image, index) => (
+                  <img
+                    key={index}
+                    src={image}
+                    alt={`진료 이미지 ${index + 1}`}
+                    className="w-full h-24 object-cover rounded-lg"
+                  />
+                ))}
+              </div>
             </div>
           )}
           {tab === "review" && (

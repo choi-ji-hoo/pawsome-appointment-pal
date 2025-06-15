@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Star } from "lucide-react";
@@ -75,7 +74,7 @@ const TreatmentDetail = () => {
                 <img
                   key={idx}
                   src={url}
-                  alt="" // alt도 불필요하나 접근성 위해 비워둠
+                  alt=""
                   className="w-full max-h-72 object-cover"
                   style={{
                     borderRadius: 0,
@@ -83,21 +82,6 @@ const TreatmentDetail = () => {
                   }}
                 />
               ))}
-              {/* 설명/추가정보 */}
-              {treatment.description && (
-                <ul className="mt-4 mb-2 list-disc list-inside text-gray-700 text-sm space-y-1">
-                  {treatment.description.map((desc: string, i: number) => (
-                    <li key={i}>{desc}</li>
-                  ))}
-                </ul>
-              )}
-              {treatment.infoTab && (
-                <ul className="mb-4 list-disc list-inside text-gray-500 text-sm space-y-1">
-                  {treatment.infoTab.map((desc: string, i: number) => (
-                    <li key={i}>{desc}</li>
-                  ))}
-                </ul>
-              )}
             </div>
           )}
           {/* 후기 탭 */}

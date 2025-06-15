@@ -56,7 +56,7 @@ const TABS = [
   { label: "진료 정보", value: "info" },
   { label: "후기", value: "review" },
 ];
-// 진료 이미지 (하단에 상세 이미지로 노출)
+// 진료 이미지 (하단에 상세 이미지로 노출 - 사용자가 교체 가능)
 const INFO_IMAGES = [
   "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=400&q=80",
   "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=400&q=80",
@@ -87,7 +87,7 @@ const TreatmentDetail = () => {
       </div>
       {/* 썸네일 (상단 배경) */}
       <div className="px-4">
-        <div className="relative overflow-hidden rounded-xl mb-3">
+        <div className="relative overflow-hidden rounded-xl mb-2">
           <img
             src={MOCK_HOSPITAL.thumbnail}
             alt={MOCK_HOSPITAL.name}
@@ -95,24 +95,44 @@ const TreatmentDetail = () => {
           />
         </div>
       </div>
+      {/* 병원 정보 카드 (썸네일 바로 아래, 진료명/금액 위) */}
+      <div className="flex items-center px-4 py-3 gap-3 border-b border-gray-200">
+        <div className="rounded-full overflow-hidden w-10 h-10 border">
+          <img
+            src={MOCK_HOSPITAL.thumbnail}
+            alt={MOCK_HOSPITAL.name}
+            className="object-cover w-10 h-10"
+          />
+        </div>
+        <div className="flex-1 flex flex-col justify-center">
+          <span className="text-base font-semibold">{MOCK_HOSPITAL.name}</span>
+          <span className="text-xs text-gray-500">{MOCK_HOSPITAL.location}</span>
+        </div>
+        <button
+          aria-label="병원 바로가기"
+          className="flex items-center justify-center p-1"
+        >
+          <span className="sr-only">병원페이지로 이동</span>
+          <svg width="24" height="24" fill="none"><path d="M9 18l6-6-6-6" stroke="#212121" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </button>
+      </div>
       {/* 메인 내용 */}
       <div className="px-4">
-        <div className="flex items-center gap-1">
-          <div className={`font-bold text-xl ${mainColor}`}>{treatment.name}</div>
-        </div>
-        <div className="text-lg font-semibold mt-2 mb-2">{treatment.price}</div>
-        <div className="flex items-center gap-1 text-yellow-500 mb-4">
+        {/* 진료명 및 금액 */}
+        <div className="font-bold text-xl mt-5 mb-1">{treatment.name}</div>
+        <div className="text-2xl font-extrabold mb-2">{treatment.price}</div>
+        <div className="flex items-center gap-1 text-yellow-500 mb-3">
           <Star fill="#FACC15" stroke="#FACC15" size={18} className="mr-0.5" />
-          <span className="text-base font-semibold">{MOCK_HOSPITAL.rating}</span>
+          <span className="text-base font-semibold text-gray-700">{MOCK_HOSPITAL.rating}</span>
         </div>
         {/* 탭 UI */}
-        <div className="flex border-b border-gray-200 my-4">
+        <div className="flex border-b border-gray-200 my-2">
           {TABS.map(t => (
             <button
               key={t.value}
               className={`flex-1 px-1 py-2 font-semibold text-center transition border-b-2 ${
                 tab === t.value
-                  ? "border-green-900 text-green-900"
+                  ? "border-gray-900 text-gray-900"
                   : "border-transparent text-gray-400"
               }`}
               onClick={() => setTab(t.value as "info" | "review")}
@@ -124,9 +144,8 @@ const TreatmentDetail = () => {
         {/* 진료 정보 탭 */}
         {tab === "info" && (
           <div className="w-full">
-            {/* 세로 스크롤될 진료 이미지 영역 */}
-            <div className="max-h-[400px] overflow-y-auto flex flex-col gap-3 py-2 hide-scrollbar">
-              {/* 진료 상세 이미지 영역 (여러 이미지 등록 가능) */}
+            {/* 진료 상세 이미지 - 세로 스크롤 가능 */}
+            <div className="max-h-[400px] overflow-y-auto flex flex-col gap-4 pt-4 pb-8 hide-scrollbar">
               {INFO_IMAGES.map((url, idx) => (
                 <img
                   key={idx}
@@ -135,28 +154,6 @@ const TreatmentDetail = () => {
                   className="rounded-xl w-full max-h-72 object-cover border"
                 />
               ))}
-              {/*--- 병원 카드 위치(이미지/텍스트 사이) ---*/}
-              <div className="sticky top-0 left-0 z-10 bg-white/90 backdrop-blur rounded-lg shadow-md px-4 py-2 flex gap-3 items-center border mx-1 mt-1 mb-4">
-                <span className="rounded-full overflow-hidden w-9 h-9 border">
-                  <img
-                    src={MOCK_HOSPITAL.thumbnail}
-                    alt={MOCK_HOSPITAL.name}
-                    className="object-cover w-9 h-9"
-                  />
-                </span>
-                <div>
-                  <div className="text-sm font-semibold">{MOCK_HOSPITAL.name}</div>
-                  <div className="text-xs text-gray-500">{MOCK_HOSPITAL.location}</div>
-                </div>
-              </div>
-              {/* 진료명 */}
-              <div className="font-semibold text-lg mt-2 mb-1">{treatment.name}</div>
-              {/* 진료 설명 */}
-              <ul className="list-disc list-inside text-gray-700 text-sm mb-2 px-1">
-                {treatment.description.map((desc, idx) => (
-                  <li key={idx}>{desc}</li>
-                ))}
-              </ul>
             </div>
           </div>
         )}
@@ -195,4 +192,3 @@ const TreatmentDetail = () => {
 };
 
 export default TreatmentDetail;
-

@@ -1,3 +1,4 @@
+
 import * as React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Star } from "lucide-react";
@@ -69,7 +70,6 @@ const TreatmentDetail = () => {
           </div>
           {tab === "info" && (
             <div className="flex flex-col pt-4 pb-8">
-              {/* 진료 이미지 여러장 - 하단 텍스트 완전 제거, 이미지만 표시 */}
               {INFO_IMAGES.map((url, idx) => (
                 <img
                   key={idx}
@@ -78,7 +78,7 @@ const TreatmentDetail = () => {
                   className="w-full max-h-72 object-cover"
                   style={{
                     borderRadius: 0,
-                    marginBottom: idx === INFO_IMAGES.length - 1 ? 0 : 8,
+                    marginBottom: 0, // 여백 완전히 제거
                   }}
                 />
               ))}
@@ -111,3 +111,4 @@ const TreatmentDetail = () => {
 };
 
 export default TreatmentDetail;
+

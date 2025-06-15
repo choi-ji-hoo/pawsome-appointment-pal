@@ -2,10 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
-
-/* 모바일에서만 동작하게 불필요한 데스크탑 전용 스타일 제거 및 모바일 기본 스타일 지정 */
+/* 전체 Pretendard 폰트 적용 */
 @layer base {
+  html, body, #root {
+    @apply font-sans bg-white text-foreground;
+  }
+
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
@@ -98,7 +100,7 @@
     -webkit-tap-highlight-color: transparent;
     overscroll-behavior: none;
     margin: 0;
-    font-size: 16px; /* 모바일용 기본글씨 */
+    font-size: 16px;
   }
 }
 
@@ -106,7 +108,6 @@
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground;
   }
@@ -120,13 +121,11 @@ html, body, #root {
   padding: 0 !important;
   overflow-x: hidden;
 }
-
 @media (min-width: 768px) {
-  /* PC 브라우저에서 너무 넓게 보이지 않게 조치 */
   html, body, #root {
     max-width: 420px !important;
     margin: 0 auto !important;
     min-height: 100vh;
-    background: #fafafa;
+    background: #fff !important;
   }
 }

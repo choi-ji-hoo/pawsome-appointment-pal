@@ -70,26 +70,18 @@ const TREATMENTS = [
   },
 ];
 
-const Banner = () => (
-  <div className="relative w-full h-40 mt-5 rounded-2xl overflow-hidden shadow-sm animate-fade-in">
+const TopBanner = () => (
+  <div className="w-full">
     <img
-      src="/lovable-uploads/e954edd0-5224-4456-b97e-6955b372e775.png"
-      alt="베너"
-      className="w-full h-full object-cover"
+      src="/lovable-uploads/69307ae2-672a-4189-8c4e-2ffc2386b09f.png"
+      alt="Top Banner"
+      className="w-full h-28 max-h-32 object-cover object-top"
       draggable={false}
+      style={{
+        borderBottomLeftRadius: "1.2rem",
+        borderBottomRightRadius: "1.2rem"
+      }}
     />
-    {/* 할인 뱃지 및 텍스트 오버레이 */}
-    <div className="absolute top-4 left-4 text-left z-10">
-      <div className="inline-block bg-[#ff6633] text-white rounded-full px-3 py-1 text-xs font-bold shadow">최대 12%</div>
-      <div className="mt-2 text-white text-lg font-extrabold drop-shadow tracking-tight">
-        우리집 반려동물<br />간식 기획전
-      </div>
-      <div className="mt-1 text-sm text-white/80">최대 12% 할인</div>
-    </div>
-    {/* 페이지 넘버 표시 */}
-    <div className="absolute right-4 bottom-4 rounded-full bg-black/40 text-white px-3 py-1 text-xs font-bold">01/35</div>
-    {/* 어두운 배경 오버레이 */}
-    <div className="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent" />
   </div>
 );
 
@@ -102,7 +94,7 @@ const FunnnelSection = () => (
         variant="outline"
         className="flex flex-col items-center justify-center py-3 px-0 bg-white rounded-xl border border-gray-100 shadow-sm hover:bg-blue-50 transition-all"
         onClick={() => {}}
-        style={{minWidth: 0}}
+        style={{ minWidth: 0 }}
       >
         <div className="mb-1">{fun.icon}</div>
         <span className="text-xs text-gray-800 font-semibold whitespace-nowrap">{fun.label}</span>
@@ -122,15 +114,16 @@ const Index = () => {
   );
 
   return (
-    <div className="bg-gradient-to-b from-blue-50 via-stone-50 to-white min-h-screen max-w-md mx-auto flex flex-col relative pb-20">
-      <header className="w-full pt-6 pb-0 px-4 flex flex-col gap-4">
+    <div className="bg-white min-h-screen max-w-md mx-auto flex flex-col relative pb-20 font-sans">
+      <TopBanner />
+      <header className="w-full pt-3 pb-0 px-4 flex flex-col gap-4">
         {/* 검색창 */}
         <div className="relative w-full">
           <Input
             placeholder="진료명, 항목명으로 검색"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-10 bg-white rounded-lg border border-gray-100 shadow focus:ring-blue-300"
+            className="pl-10 bg-white rounded-lg border border-gray-100 shadow focus:ring-blue-300 font-sans"
           />
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-300 pointer-events-none">
             <svg
@@ -161,7 +154,7 @@ const Index = () => {
               type="button"
               variant={selectedSpecies === sp.label ? "default" : "outline"}
               className={cn(
-                "flex-1 min-w-0 flex items-center justify-center gap-1 font-bold transition-all px-4 py-2 text-base rounded-full border-2",
+                "flex-1 min-w-0 flex items-center justify-center gap-1 font-bold transition-all px-4 py-2 text-base rounded-full border-2 font-sans",
                 selectedSpecies === sp.label
                   ? "ring-2 ring-blue-400 bg-blue-50 border-blue-200 text-blue-700"
                   : "border-gray-200 bg-white hover:bg-gray-50 text-gray-500"
@@ -180,7 +173,7 @@ const Index = () => {
       <main className="flex-1 w-full">
         <section className="mt-6 px-3 mb-28">
           <div className="mb-3 flex items-end justify-between">
-            <div className="text-lg font-bold text-blue-900 tracking-tight">
+            <div className="text-lg font-bold text-blue-900 tracking-tight font-sans">
               {selectedSpecies} 진료 상품
             </div>
             <div className="text-xs text-gray-400">{filteredTreatments.length}개</div>
@@ -198,7 +191,7 @@ const Index = () => {
                 .map((treat) => (
                   <li
                     key={treat.id}
-                    className="flex bg-white rounded-xl shadow items-center gap-4 p-3 border border-gray-100 hover:scale-[1.01] transition cursor-pointer"
+                    className="flex bg-white rounded-xl shadow items-center gap-4 p-3 border border-gray-100 hover:scale-[1.01] transition cursor-pointer font-sans"
                     onClick={() => navigate(`/treatment/${treat.id}`)}
                   >
                     <div className="flex-shrink-0">
@@ -209,11 +202,11 @@ const Index = () => {
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <div className="font-bold text-blue-700 truncate">{treat.name}</div>
-                      <div className="text-xs mt-1 text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis">
+                      <div className="font-bold text-blue-700 truncate font-sans">{treat.name}</div>
+                      <div className="text-xs mt-1 text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis font-sans">
                         {treat.items.join(" · ")}
                       </div>
-                      <div className="text-xs mt-1 text-blue-500 font-medium flex items-center gap-1">
+                      <div className="text-xs mt-1 text-blue-500 font-medium flex items-center gap-1 font-sans">
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
                         {treat.hours}
                       </div>

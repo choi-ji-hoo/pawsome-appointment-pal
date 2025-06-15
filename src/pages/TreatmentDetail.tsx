@@ -133,6 +133,21 @@ const TreatmentDetail = () => {
   // 메인 색상/테마
   const mainColor = "text-green-900";
 
+  const timeSectionRef = React.useRef<HTMLDivElement>(null);
+
+  // 날짜 선택 시 시간 영역으로 자동 스크롤
+  React.useEffect(() => {
+    if (step === 2 && date && timeSectionRef.current) {
+      // 약간 delay 후 스크롤
+      setTimeout(() => {
+        timeSectionRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 200);
+    }
+  }, [date, step]);
+
   return (
     <div className="relative min-h-screen max-w-md mx-auto bg-white pb-28">
       {/* Top Header */}
@@ -407,7 +422,7 @@ const TreatmentDetail = () => {
               {/* Step 2: 날짜/시간 선택 */}
               {step === 2 && (
                 <section className="bg-gray-50 px-0 py-4 rounded-2xl shadow border mb-2 flex flex-col gap-0">
-                  <div className="px-5">
+                  <div className="px-5 pb-2 border-b border-gray-100">
                     <div className="font-semibold text-base mb-2 text-gray-800 text-center">원하는 날짜</div>
                     <div className="flex justify-center items-center">
                       <div className="bg-white p-2 rounded-xl border w-full flex justify-center">
@@ -420,12 +435,37 @@ const TreatmentDetail = () => {
                         />
                       </div>
                     </div>
-                  </div>
-                  <div className="mt-7 px-5 flex flex-col">
-                    <div className="font-semibold text-base mb-3 text-gray-800 text-center">
-                      시간 선택
+                    <div className="w-full flex justify-center mt-2">
+                      <span className="text-xs text-gray-500">
+                        원하는 날짜를 선택하세요
+                      </span>
                     </div>
-                    <div className="flex flex-wrap gap-2 justify-center">
+                  </div>
+                  {/* 시간 선택 부분: 날짜 고르면 더 강조 */}
+                  <div
+                    ref={timeSectionRef}
+                    className={`mt-0 px-5 py-5 transition-all duration-300 ${
+                      date
+                        ? "bg-green-50 ring-2 ring-green-200"
+                        : "bg-white"
+                    } rounded-b-2xl`}
+                    style={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}
+                  >
+                    <div className="flex flex-col items-center">
+                      <div className={`font-semibold text-base mb-1 text-gray-800 transition-colors ${
+                        date ? "text-green-700" : ""
+                      }`}>
+                        시간 선택
+                      </div>
+                      <div className="text-xs mb-3 text-gray-500">
+                        예약 가능한 시간을 선택해주세요
+                      </div>
+                    </div>
+                    <div
+                      className="flex flex-wrap gap-2 justify-center"
+                      // 시간 버튼에 스크롤 최적화
+                      style={{ maxHeight: "160px", overflowY: "auto" }}
+                    >
                       {TIMES.map((t) => (
                         <Button
                           key={t}
@@ -443,6 +483,11 @@ const TreatmentDetail = () => {
                         </Button>
                       ))}
                     </div>
+                    {!date && (
+                      <div className="mt-2 text-xs text-gray-400 text-center">
+                        날짜를 먼저 선택해야 시간 선택이 가능합니다
+                      </div>
+                    )}
                   </div>
                 </section>
               )}

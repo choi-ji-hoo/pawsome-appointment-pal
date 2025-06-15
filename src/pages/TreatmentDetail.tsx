@@ -406,21 +406,25 @@ const TreatmentDetail = () => {
               )}
               {/* Step 2: 날짜/시간 선택 */}
               {step === 2 && (
-                <section className="bg-gray-50 px-4 py-5 rounded-2xl shadow border mb-2 flex flex-col gap-6">
-                  <div>
-                    <div className="font-semibold text-base mb-2 text-gray-800">원하는 날짜</div>
-                    <div className="bg-white p-2 rounded-xl border">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        className="mx-auto pointer-events-auto"
-                        fromDate={new Date()}
-                      />
+                <section className="bg-gray-50 px-0 py-4 rounded-2xl shadow border mb-2 flex flex-col gap-0">
+                  <div className="px-5">
+                    <div className="font-semibold text-base mb-2 text-gray-800 text-center">원하는 날짜</div>
+                    <div className="flex justify-center items-center">
+                      <div className="bg-white p-2 rounded-xl border w-full flex justify-center">
+                        <Calendar
+                          mode="single"
+                          selected={date}
+                          onSelect={setDate}
+                          className="mx-auto pointer-events-auto"
+                          fromDate={new Date()}
+                        />
+                      </div>
                     </div>
                   </div>
-                  <div>
-                    <div className="font-semibold text-base mb-2 text-gray-800">시간 선택</div>
+                  <div className="mt-7 px-5 flex flex-col">
+                    <div className="font-semibold text-base mb-3 text-gray-800 text-center">
+                      시간 선택
+                    </div>
                     <div className="flex flex-wrap gap-2 justify-center">
                       {TIMES.map((t) => (
                         <Button

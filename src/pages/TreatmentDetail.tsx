@@ -86,21 +86,23 @@ const TreatmentDetail = () => {
       </div>
       {/* 썸네일 (상단 배경) */}
       <div className="px-4">
-        <div className="relative overflow-hidden rounded-xl mb-2">
+        <div className="relative overflow-hidden mb-2">
           <img
             src={MOCK_HOSPITAL.thumbnail}
             alt={MOCK_HOSPITAL.name}
             className="w-full h-[156px] object-cover"
+            style={{ borderRadius: 0 }}
           />
         </div>
       </div>
-      {/* 병원 정보 카드 (썸네일 바로 아래, 진료명/금액 위) */}
+      {/* 병원 정보 카드 */}
       <div className="flex items-center px-4 py-3 gap-3 border-b border-gray-200">
-        <div className="rounded-full overflow-hidden w-10 h-10 border">
+        <div className="overflow-hidden w-10 h-10 border" style={{ borderRadius: 0 }}>
           <img
             src={MOCK_HOSPITAL.thumbnail}
             alt={MOCK_HOSPITAL.name}
             className="object-cover w-10 h-10"
+            style={{ borderRadius: 0 }}
           />
         </div>
         <div className="flex-1 flex flex-col justify-center">
@@ -144,14 +146,18 @@ const TreatmentDetail = () => {
         {/* 진료 정보 탭 */}
         {tab === "info" && (
           <div className="w-full">
-            {/* 진료 상세 이미지 - 세로 스크롤 가능 */}
-            <div className="max-h-[400px] overflow-y-auto flex flex-col pt-4 pb-8 hide-scrollbar space-y-0">
+            {/* 진료 상세 이미지 - 세로 스크롤 가능 (여백, 간격, 라운딩 없음) */}
+            <div className="max-h-[400px] overflow-y-auto flex flex-col pt-4 pb-8">
               {INFO_IMAGES.map((url, idx) => (
                 <img
                   key={idx}
                   src={url}
                   alt={`진료 이미지 ${idx + 1}`}
-                  className="rounded-xl w-full max-h-72 object-cover border"
+                  className="w-full max-h-72 object-cover"
+                  style={{
+                    borderRadius: 0,
+                    marginBottom: 0, // 이미지 하단 마진 제거
+                  }}
                 />
               ))}
             </div>

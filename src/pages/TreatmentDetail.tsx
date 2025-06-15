@@ -1,9 +1,9 @@
 import * as React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Star } from "lucide-react";
+import { Star, ArrowLeft } from "lucide-react";
 import HospitalInfoCard from "@/components/HospitalInfoCard";
 import ReservationDrawer from "@/components/ReservationDrawer";
-import { TREATMENTS, MOCK_HOSPITAL, TABS, INFO_IMAGES } from "@/utils/constants";
+import { TREATMENTS, MOCK_HOSPITAL, TABS } from "@/utils/constants";
 
 // TreatmentDetail 메인 컴포넌트
 const TreatmentDetail = () => {
@@ -22,27 +22,32 @@ const TreatmentDetail = () => {
           onClick={() => navigate("/")}
           className="rounded-full hover:bg-gray-100 size-9 flex items-center justify-center"
         >
-          <span className="sr-only">뒤로가기</span>
-          <svg width="22" height="22" fill="none"><path d="M15 18l-6-6 6-6" stroke="#212121" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          <ArrowLeft size={22} stroke="#212121" />
         </button>
       </div>
 
       <div className="px-0" style={{ maxHeight: "calc(100vh - 76px)", overflowY: "auto" }}>
-        {/* 썸네일 */}
-        <div className="relative overflow-hidden mb-2">
-          <img
-            src={MOCK_HOSPITAL.thumbnail}
-            alt={MOCK_HOSPITAL.name}
-            className="w-full h-[164px] object-cover"
-            style={{ borderRadius: 0 }}
-          />
+        {/* 상단 썸네일 */}
+        <div className="flex justify-center px-4 mt-1">
+          <div className="w-full">
+            <img
+              src={MOCK_HOSPITAL.thumbnail}
+              alt={MOCK_HOSPITAL.name}
+              className="w-full h-[164px] object-cover rounded-xl shadow"
+              draggable={false}
+              style={{ background: "#eee" }}
+            />
+          </div>
         </div>
         {/* 병원 정보 카드 */}
-        <HospitalInfoCard hospital={MOCK_HOSPITAL} onClick={() => navigate("/hospital/1")} />
+        <div className="px-4">
+          <HospitalInfoCard hospital={MOCK_HOSPITAL} onClick={() => navigate("/hospital/1")} />
+        </div>
 
         {/* 메인 내용 */}
         <div className="px-4">
-          <div className="font-bold text-lg mt-4 mb-1">{treatment.name}</div>
+          {/* 진료명/가격/평점 */}
+          <div className="font-bold text-lg mt-3 mb-1">{treatment.name}</div>
           <div className="text-xl font-extrabold mb-2">{treatment.price}</div>
           <div className="flex items-center gap-1 text-yellow-500 mb-3">
             <Star fill="#FACC15" stroke="#FACC15" size={16} className="mr-0.5" />
@@ -65,35 +70,25 @@ const TreatmentDetail = () => {
               </button>
             ))}
           </div>
-          {/* 탭 컨텐츠 */}
+          {/* 진료 정보(탭 컨텐츠) */}
           {tab === "info" && (
             <div className="flex flex-col pt-3 pb-8">
-              {INFO_IMAGES.map((url, idx) => (
-                <img
-                  key={idx}
-                  src={url}
-                  alt=""
-                  className="w-full h-auto object-cover"
-                  style={{
-                    borderRadius: 0,
-                    marginBottom: 0,
-                    display: "block",
-                  }}
-                  draggable={false}
-                />
-              ))}
-              {/* 기존 첨부 이미지(hoodi 로고) 유지 */}
-              <div className="flex justify-center my-6">
-                <img 
-                  src="/lovable-uploads/9904435b-9a23-4fd8-8d9e-62805c113e40.png"
-                  alt="hoodi 로고"
-                  className="w-40 h-40 object-contain rounded-xl shadow bg-white"
-                  style={{ borderRadius: 16, background: "#fff" }}
-                  draggable={false}
-                />
-              </div>
+              {/* 기존 이미지, hooodi 로고 삭제, 진료 설명만 표시 */}
+              {Array.isArray(treatment.description) &&
+                treatment.description.map((line, i) => (
+                  <div key={i} className="text-sm text-gray-700 mb-2">
+                    {line}
+                  </div>
+                ))}
+              {Array.isArray(treatment.infoTab) &&
+                treatment.infoTab.map((info, idx) => (
+                  <div key={idx} className="text-xs text-gray-400 mb-1">
+                    {info}
+                  </div>
+                ))}
             </div>
           )}
+          {/* 후기(탭 컨텐츠)는 그대로 */}
           {tab === "review" && (
             <div className="flex flex-col items-center py-8">
               <img

@@ -2,7 +2,7 @@ import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import BannerCarousel from "@/components/BannerCarousel";
 import SpeciesToggle from "@/components/SpeciesToggle";
-import CategoryFunnelToggle from "@/components/CategoryFunnelToggle";
+import CategoryFunnelToggle, { FunnelCategory } from "@/components/CategoryFunnelToggle";
 import { Input } from "@/components/ui/input";
 import { Dog, Cat, Calendar, Syringe, HeartPulse, Bone } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -19,6 +19,21 @@ const FUNNELS = [
 const SPECIES = [
   { label: "강아지", icon: <Dog size={20} />, value: "dog" },
   { label: "고양이", icon: <Cat size={20} />, value: "cat" },
+];
+
+// 종에 따라 카테고리 배열 분리
+const DOG_FUNNELS: FunnelCategory[] = [
+  { label: "병원 예약", iconKey: "hospital", value: "hospital" },
+  { label: "예방의학", iconKey: "prevent", value: "prevent" },
+  { label: "치의학", iconKey: "den", value: "den" },
+  { label: "정형외과", iconKey: "ortho", value: "ortho" },
+];
+
+const CAT_FUNNELS: FunnelCategory[] = [
+  { label: "병원 예약", iconKey: "hospital", value: "hospital" },
+  { label: "예방의학", iconKey: "prevent", value: "prevent" },
+  { label: "치의학", iconKey: "den", value: "den" },
+  // 고양이 정형외과 제외 예시
 ];
 
 const TREATMENTS = [
@@ -78,6 +93,13 @@ const Index = () => {
   const [selectedCategory, setSelectedCategory] = React.useState("hospital");
   const navigate = useNavigate();
 
+  // 종에 따라 카테고리 배열 제공
+  const funnelList = React.useMemo<FunnelCategory[]>(() => {
+    if (selectedSpecies === "강아지") return DOG_FUNNELS;
+    if (selectedSpecies === "고양이") return CAT_FUNNELS;
+    return DOG_FUNNELS;
+  }, [selectedSpecies]);
+
   const filteredTreatments = React.useMemo(
     () =>
       TREATMENTS.filter((t) => t.species === selectedSpecies),
@@ -115,7 +137,11 @@ const Index = () => {
         {/* 종 토글: 이쁘게 개선 */}
         <SpeciesToggle selectedSpecies={selectedSpecies} setSelectedSpecies={setSelectedSpecies} />
         {/* 카테고리 카드형 영역 이쁘게 개선 */}
-        <CategoryFunnelToggle selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
+        <CategoryFunnelToggle
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          funnelList={funnelList}
+        />
       </header>
       <main className="flex-1 w-full">
         <section className="mt-6 px-3 mb-28">

@@ -3,21 +3,29 @@ import React from "react";
 import { Calendar, Syringe, HeartPulse, Bone } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const FUNNELS = [
-  { label: "병원 예약", icon: <Calendar />, value: "hospital" },
-  { label: "예방의학", icon: <Syringe />, value: "prevent" },
-  { label: "치의학", icon: <HeartPulse />, value: "den" },
-  { label: "정형외과", icon: <Bone />, value: "ortho" },
-];
+// 아이콘 매핑
+const ICONS: Record<string, React.ReactNode> = {
+  hospital: <Calendar size={26} />,
+  prevent: <Syringe size={26} />,
+  den: <HeartPulse size={26} />,
+  ortho: <Bone size={26} />,
+};
+
+export interface FunnelCategory {
+  label: string;
+  value: string;
+  iconKey: keyof typeof ICONS;
+}
 
 interface CategoryFunnelToggleProps {
   selectedCategory: string;
   setSelectedCategory: (val: string) => void;
+  funnelList: FunnelCategory[];
 }
 
-const CategoryFunnelToggle = ({ selectedCategory, setSelectedCategory }: CategoryFunnelToggleProps) => (
-  <div className="flex w-full justify-between gap-3 px-0 mt-5 mb-1">
-    {FUNNELS.map((fun) => {
+const CategoryFunnelToggle = ({ selectedCategory, setSelectedCategory, funnelList }: CategoryFunnelToggleProps) => (
+  <div className="flex w-full justify-between gap-2 px-0 mt-5 mb-2">
+    {funnelList.map((fun) => {
       const isActive = selectedCategory === fun.value;
       return (
         <button
@@ -25,34 +33,32 @@ const CategoryFunnelToggle = ({ selectedCategory, setSelectedCategory }: Categor
           type="button"
           onClick={() => setSelectedCategory(fun.value)}
           className={cn(
-            "flex-1 flex flex-col items-center justify-center py-3 px-2 rounded-2xl border-2 transition-all duration-150",
+            "flex-1 flex flex-col items-center justify-center py-3 px-2 rounded-xl border-2 transition-all duration-150 group shadow-none max-w-[90px]",
             isActive
-              ? "bg-blue-500 border-blue-500 text-white shadow-lg"
-              : "bg-white border-gray-200 text-gray-400 hover:border-blue-300 hover:text-blue-500"
+              ? "bg-black border-black text-white shadow-lg"
+              : "bg-white border-gray-200 text-gray-400 hover:border-neutral-700 hover:text-neutral-900"
           )}
-          style={isActive
-            ? { boxShadow: "0 4px 24px rgba(58,133,242,0.10)" }
-            : {}
-          }
+          style={isActive ? { boxShadow: "0 4px 18px rgba(40,40,40,0.17)" } : {}}
         >
           <span
             className={cn(
               "mb-1 transition-colors",
-              isActive ? "text-white" : "text-gray-400"
+              isActive ? "text-white" : "text-gray-400 group-hover:text-black"
             )}
           >
-            {React.cloneElement(fun.icon, { size: 26 })}
+            {ICONS[fun.iconKey]}
           </span>
           <span
             className={cn(
-              "text-xs font-bold transition-colors",
-              isActive ? "text-white" : "text-gray-500"
+              "text-xs font-bold tracking-tight transition-colors text-center",
+              isActive ? "text-white" : "text-gray-600 group-hover:text-black"
             )}
+            style={{lineHeight: "1.25", letterSpacing: "-0.3px"}}
           >
             {fun.label}
           </span>
         </button>
-      );
+      )
     })}
   </div>
 );

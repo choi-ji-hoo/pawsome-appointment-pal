@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Star, ArrowLeft } from "lucide-react";
@@ -70,12 +69,12 @@ const TreatmentDetail = () => {
             <ArrowLeft size={18} className="rotate-180" color="#fff" strokeWidth={2.6} />
           </button>
         </div>
-        {/* 병원카드와 간격 확보 */}
-        <div style={{ height: 34 }} />
+        {/* 병원카드와 진료명 사이 충분한 간격 확보 (height 증가) */}
+        <div style={{ height: 60 }} />
       </div>
 
       <div className="px-4">
-        {/* 진료명, 가격, 평점 등 */}
+        {/* 진료명, 가격 등 */}
         <div className="font-bold text-lg mt-2 mb-1">{treatment.name}</div>
         <div className="text-xl font-extrabold mb-2">{treatment.price}</div>
         <div className="flex items-center gap-1 text-yellow-500 mb-3">

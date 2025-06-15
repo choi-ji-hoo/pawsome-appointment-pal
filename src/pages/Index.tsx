@@ -50,6 +50,37 @@ const speciesList = [
   { label: "기타", icon: <PawPrint size={18} className="text-primary inline mr-1" /> },
 ];
 
+const TREATMENTS = [
+  {
+    id: 1,
+    name: "종합검진",
+    thumbnail: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=facearea&w=160&h=160",
+    items: ["내과", "혈액·소변검사", "영상의학", "기초초음파", "피부·소양증"],
+    hours: "월~금 9:00 - 18:00",
+  },
+  {
+    id: 2,
+    name: "예방접종/건강상담",
+    thumbnail: "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=facearea&w=160&h=160",
+    items: ["백신접종", "구충", "정기상담"],
+    hours: "월~토 9:30 - 18:00",
+  },
+  {
+    id: 3,
+    name: "치과진료",
+    thumbnail: "https://images.unsplash.com/photo-1466721591366-2d5fba72006d?auto=format&fit=facearea&w=160&h=160",
+    items: ["스케일링", "발치", "치과상담"],
+    hours: "매주 토요일 10:00 - 15:00",
+  },
+  {
+    id: 4,
+    name: "특수동물 진료",
+    thumbnail: "https://images.unsplash.com/photo-1452378174528-3090a4bba7b2?auto=format&fit=facearea&w=160&h=160",
+    items: ["토끼", "조류", "설치류"],
+    hours: "예약제 (전화 문의)",
+  },
+];
+
 const Index = () => {
   const [appointments, setAppointments] = React.useState<Appointment[]>(dummyData);
 
@@ -279,6 +310,45 @@ const Index = () => {
               </tbody>
             </table>
           </div>
+        </section>
+        {/* 진료 리스트 */}
+        <section className="mt-8 mx-4 mb-28">
+          <h2 className="text-xl font-bold mb-4 flex items-center gap-2 text-blue-800">
+            <span className="inline-flex w-6 h-6 items-center justify-center rounded-full bg-blue-100">
+              {/* Lucide-React list icon */}
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><line x1="8" x2="21" y1="6" y2="6" /><line x1="8" x2="21" y1="12" y2="12" /><line x1="8" x2="21" y1="18" y2="18" /><line x1="3" x2="3.01" y1="6" y2="6" /><line x1="3" x2="3.01" y1="12" y2="12" /><line x1="3" x2="3.01" y1="18" y2="18" /></svg>
+            </span>
+            진료 리스트
+          </h2>
+          <ul className="flex flex-col gap-4">
+            {TREATMENTS.map((treat) => (
+              <li
+                key={treat.id}
+                className="flex bg-white rounded-xl shadow-md items-center gap-4 p-3 border hover:scale-[1.01] transition"
+              >
+                <div className="flex-shrink-0">
+                  <img
+                    src={treat.thumbnail}
+                    alt={treat.name}
+                    className="w-16 h-16 rounded-lg object-cover border border-blue-100 bg-gray-50"
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="font-bold text-blue-700 truncate">{treat.name}</div>
+                  <div className="text-xs mt-1 text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis">
+                    {treat.items.join(" · ")}
+                  </div>
+                  <div className="text-xs mt-1 text-blue-500 font-medium">
+                    <span className="inline-flex items-center mr-1">
+                      {/* Lucide-React clock icon */}
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mr-0.5 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                    </span>
+                    {treat.hours}
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
         </section>
       </div>
       <TabsBar />

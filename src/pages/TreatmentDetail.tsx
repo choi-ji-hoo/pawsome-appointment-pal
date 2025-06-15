@@ -111,6 +111,7 @@ const TreatmentDetail = () => {
         <button
           aria-label="병원 바로가기"
           className="flex items-center justify-center p-1"
+          onClick={() => navigate("/hospital/1")}
         >
           <span className="sr-only">병원페이지로 이동</span>
           <svg width="24" height="24" fill="none"><path d="M9 18l6-6-6-6" stroke="#212121" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>

@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import BannerCarousel from "@/components/BannerCarousel";
-import SpeciesToggle from "@/components/SpeciesToggle";
 import CategoryFunnelToggle, { FunnelCategory } from "@/components/CategoryFunnelToggle";
 import { Input } from "@/components/ui/input";
 import { Dog, Cat, Calendar, Syringe, HeartPulse, Bone } from "lucide-react";
@@ -88,7 +87,8 @@ const TREATMENTS = [
 ];
 
 const Index = () => {
-  const [selectedSpecies, setSelectedSpecies] = React.useState("강아지");
+  // 초기엔 종이 선택되지 않음 ("")
+  const [selectedSpecies, setSelectedSpecies] = React.useState("");
   const [search, setSearch] = React.useState("");
   const [selectedCategory, setSelectedCategory] = React.useState("hospital");
   const navigate = useNavigate();
@@ -97,7 +97,7 @@ const Index = () => {
   const funnelList = React.useMemo<FunnelCategory[]>(() => {
     if (selectedSpecies === "강아지") return DOG_FUNNELS;
     if (selectedSpecies === "고양이") return CAT_FUNNELS;
-    return DOG_FUNNELS;
+    return [];
   }, [selectedSpecies]);
 
   const filteredTreatments = React.useMemo(
@@ -134,9 +134,9 @@ const Index = () => {
         <div className="mt-0">
           <BannerCarousel />
         </div>
-        {/* 종 토글: 이쁘게 개선 */}
-        <SpeciesToggle selectedSpecies={selectedSpecies} setSelectedSpecies={setSelectedSpecies} />
-        {/* 카테고리 탭 & 진료과목 영역 by 이미지 참고 */}
+        {/* 종 토글 UI 삭제됨 */}
+        {/* <SpeciesToggle selectedSpecies={selectedSpecies} setSelectedSpecies={setSelectedSpecies} /> */}
+        {/* 카테고리 탭 & 진료과목 영역 */}
         <CategoryFunnelToggle
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
@@ -149,13 +149,17 @@ const Index = () => {
         <section className="mt-6 px-3 mb-28">
           <div className="mb-3 flex items-end justify-between">
             <div className="text-lg font-bold text-blue-900 tracking-tight font-sans">
-              {selectedSpecies} 진료 상품
+              {selectedSpecies ? `${selectedSpecies} 진료 상품` : "진료 상품"}
             </div>
             <div className="text-xs text-gray-400">{filteredTreatments.length}개</div>
           </div>
           {/* --- 카드 리스트 --- */}
           <ul className="flex flex-col gap-4">
-            {filteredTreatments.length === 0 ? (
+            {selectedSpecies === "" ? (
+              <li className="text-center text-gray-400 py-8 text-base">
+                종(강아지/고양이)을 먼저 선택해 주세요.
+              </li>
+            ) : filteredTreatments.length === 0 ? (
               <li className="text-center text-gray-400 py-8 text-base">해당 동물의 진료가 없습니다.</li>
             ) : (
               filteredTreatments

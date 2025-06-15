@@ -1,10 +1,10 @@
-
 import * as React from "react";
 import { Dog, Cat, Calendar, Syringe, HeartPulse, Bone } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
+import BannerCarousel from "@/components/BannerCarousel";
 
 // 카테고리 Funnel 정보
 const FUNNELS = [
@@ -146,8 +146,8 @@ const Index = () => {
             </svg>
           </span>
         </div>
-        {/* 베너 */}
-        <Banner />
+        {/* 베너 (자동 슬라이드 캐러셀) */}
+        <BannerCarousel />
         {/* 퍼널 카테고리 */}
         <FunnnelSection />
         {/* 강아지/고양이 토글 */}

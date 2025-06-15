@@ -1,5 +1,6 @@
+
 import * as React from "react";
-import { Dog, Cat, Calendar, Syringe, Tooth, Bone } from "lucide-react";
+import { Dog, Cat, Calendar, Syringe, HeartPulse, Bone } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 const FUNNELS = [
   { label: "병원 예약", icon: <Calendar size={22} className="text-blue-400" />, value: "hospital" },
   { label: "예방의학", icon: <Syringe size={22} className="text-green-500" />, value: "prevent" },
-  { label: "치의학", icon: <Tooth size={22} className="text-yellow-600" />, value: "den" },
+  { label: "치의학", icon: <HeartPulse size={22} className="text-yellow-600" />, value: "den" },
   { label: "정형외과", icon: <Bone size={22} className="text-rose-500" />, value: "ortho" },
 ];
 

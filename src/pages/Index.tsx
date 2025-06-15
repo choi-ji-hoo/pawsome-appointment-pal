@@ -1,3 +1,4 @@
+
 import * as React from "react";
 import { Dog, Cat, Calendar, Syringe, HeartPulse, Bone } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -70,34 +71,6 @@ const TREATMENTS = [
   },
 ];
 
-const TopBanner = () => (
-  <div className="w-full relative mb-4">
-    <img
-      src="/lovable-uploads/9e1f8f70-10c2-4eb3-a828-03528678a33b.png"
-      alt="Top Banner"
-      className="w-full h-[196px] object-cover object-center rounded-b-3xl shadow-sm"
-      draggable={false}
-      style={{
-        borderBottomLeftRadius: "1.6rem",
-        borderBottomRightRadius: "1.6rem"
-      }}
-    />
-    <div className="absolute left-0 right-0 top-0 h-[84px] flex justify-center items-center pointer-events-none">
-      <span className="font-extrabold text-3xl tracking-wider text-black font-[Pretendard] drop-shadow bg-white/90 px-8 py-1 rounded-b-xl select-none">hoodi</span>
-    </div>
-    {/* 텍스트와 뱃지 */}
-    <div className="absolute left-6 bottom-7 z-10">
-      <div className="flex items-center space-x-2">
-        <span className="bg-red-400 text-white text-xs rounded-full px-2.5 py-0.5 font-bold mr-2 shadow" style={{letterSpacing: "-1px"}}>최대 12%</span>
-      </div>
-      <div className="text-white text-xl font-extrabold mt-2 drop-shadow" style={{lineHeight: "1.2"}}>우리집 반려동물<br/>간식 기획전</div>
-      <div className="text-white text-xs mt-1 opacity-90">최대 12% 할인</div>
-    </div>
-    {/* 페이지 인디케이터 예시 */}
-    <div className="absolute right-4 bottom-3 text-xs text-white/95 bg-black/40 rounded-full px-3 py-1 font-bold">{`01/35`}</div>
-  </div>
-);
-
 const FunnnelSection = () => (
   <div className="grid grid-cols-4 gap-2 mt-3 px-2">
     {FUNNELS.map((fun) => (
@@ -128,8 +101,8 @@ const Index = () => {
 
   return (
     <div className="bg-white min-h-screen max-w-md mx-auto flex flex-col relative pb-20 font-sans">
-      <TopBanner />
-      <header className="w-full pt-3 pb-0 px-4 flex flex-col gap-4">
+      {/* 상단 배너 제거, 상단 패딩만 조절 */}
+      <header className="w-full pt-6 pb-0 px-4 flex flex-col gap-4">
         {/* 검색창 */}
         <div className="relative w-full">
           <Input

@@ -96,6 +96,8 @@ const TreatmentDetail = () => {
   const [guardianName, setGuardianName] = React.useState("");
   const [guardianPhone, setGuardianPhone] = React.useState("");
   const [petName, setPetName] = React.useState("");
+  // 반려동물 몸무게 추가
+  const [petWeight, setPetWeight] = React.useState("");
 
   // 예시 옵션 (수의사/패키지 등 간단한 radio로)
   const OPTIONS = ["일반검진", "프리미엄검진"];
@@ -414,6 +416,20 @@ const TreatmentDetail = () => {
                       className="rounded-lg py-3 px-4 text-base"
                     />
                   </div>
+                  <div>
+                    <label className="text-sm font-semibold block mb-1">반려동물 몸무게(kg)</label>
+                    <Input
+                      type="number"
+                      inputMode="decimal"
+                      min="0"
+                      step="0.1"
+                      value={petWeight}
+                      onChange={e => setPetWeight(e.target.value)}
+                      required
+                      placeholder="예) 6.8"
+                      className="rounded-lg py-3 px-4 text-base"
+                    />
+                  </div>
                 </div>
               )}
               {/* Step 4: 신청 완료 */}
@@ -436,7 +452,14 @@ const TreatmentDetail = () => {
                     (step === 1 && !option) ||
                     (step === 2 && (!date || !time)) ||
                     (step === 3 &&
-                      (!guardianName || !guardianPhone.match(/^01[0-9]-\d{3,4}-\d{4}$/) || !petName))
+                      (
+                        !guardianName
+                        || !guardianPhone.match(/^01[0-9]-\d{3,4}-\d{4}$/)
+                        || !petName
+                        || !petWeight
+                        || parseFloat(petWeight) <= 0
+                      )
+                    )
                   }
                 >
                   다음

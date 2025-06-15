@@ -1,8 +1,7 @@
-
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import { TREATMENTS } from "@/utils/constants";
+import { TREATMENTS, INFO_IMAGES } from "@/utils/constants";
 
 const MOCK_HOSPITAL = {
   name: "후디 동물병원",
@@ -57,25 +56,21 @@ const HospitalDetail = () => {
       {/* 진료 상품 섹션 */}
       <div className="px-4 py-6">
         <div className="text-lg font-bold mb-4">진료 상품</div>
-        <div className="grid grid-cols-2 gap-3">
-          {TREATMENTS.map(treatment => (
-            <div
-              key={treatment.id}
-              className="bg-white rounded-xl border border-gray-200 overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
-              onClick={() => navigate(`/treatment/${treatment.id}`)}
-            >
-              <div className="aspect-[4/3] overflow-hidden">
-                <img
-                  src={`https://images.unsplash.com/photo-${treatment.id === 1 ? '1618160702438-9b02ab6515c9' : treatment.id === 2 ? '1535268647677-300dbf3d78d1' : treatment.id === 3 ? '1466721591366-2d5fba72006d' : '1582562124811-c09040d0a901'}?auto=format&fit=crop&w=300&q=80`}
-                  alt={treatment.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="p-3">
-                <div className="font-semibold text-sm mb-1">{treatment.name}</div>
-                <div className="text-blue-900 font-bold text-lg">{treatment.price}</div>
-              </div>
-            </div>
+        <div className="flex flex-col">
+          {INFO_IMAGES.map((url, idx) => (
+            <img
+              key={idx}
+              src={url}
+              alt=""
+              className="w-full h-auto object-cover cursor-pointer"
+              style={{
+                borderRadius: 0,
+                marginBottom: 0,
+                display: "block",
+              }}
+              onClick={() => navigate(`/treatment/${idx + 1}`)}
+              draggable={false}
+            />
           ))}
         </div>
       </div>

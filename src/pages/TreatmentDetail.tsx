@@ -28,8 +28,10 @@ const TreatmentDetail = () => {
           <svg width="22" height="22" fill="none"><path d="M15 18l-6-6 6-6" stroke="#212121" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
         </button>
       </div>
-      {/* 썸네일 */}
-      <div className="px-4">
+
+      {/* 전체 스크롤 영역 래퍼 */}
+      <div className="px-4" style={{ maxHeight: "calc(100vh - 110px)", overflowY: "auto" }}>
+        {/* 썸네일 */}
         <div className="relative overflow-hidden mb-2">
           <img
             src={MOCK_HOSPITAL.thumbnail}
@@ -38,72 +40,73 @@ const TreatmentDetail = () => {
             style={{ borderRadius: 0 }}
           />
         </div>
-      </div>
-      {/* 병원 정보 카드 */}
-      <HospitalInfoCard hospital={MOCK_HOSPITAL} onClick={() => navigate("/hospital/1")} />
-      {/* 메인 내용 */}
-      <div className="px-4">
-        {/* 진료명 및 금액 */}
-        <div className="font-bold text-xl mt-5 mb-1">{treatment.name}</div>
-        <div className="text-2xl font-extrabold mb-2">{treatment.price}</div>
-        <div className="flex items-center gap-1 text-yellow-500 mb-3">
-          <Star fill="#FACC15" stroke="#FACC15" size={18} className="mr-0.5" />
-          <span className="text-base font-semibold text-gray-700">{MOCK_HOSPITAL.rating}</span>
-        </div>
-        {/* 탭 UI */}
-        <div className="flex border-b border-gray-200 my-2">
-          {TABS.map(t => (
-            <button
-              key={t.value}
-              className={`flex-1 px-1 py-2 font-semibold text-center transition border-b-2 ${
-                tab === t.value
-                  ? "border-gray-900 text-gray-900"
-                  : "border-transparent text-gray-400"
-              }`}
-              onClick={() => setTab(t.value as "info" | "review")}
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
-        {/* 진료 정보 탭 */}
-        {tab === "info" && (
-          // 탭 영역 전체를 스크롤 가능하도록 height/overflow 지정 (모바일에서 적절하게 보이도록!)
-          <div className="flex flex-col pt-4 pb-8" style={{ maxHeight: '60vh', overflowY: 'auto' }}>
-            {/* 진료 설명 등 추가 콘텐츠가 있다면 여기에 배치 */}
-            {INFO_IMAGES.map((url, idx) => (
-              <img
-                key={idx}
-                src={url}
-                alt={`진료 이미지 ${idx + 1}`}
-                className="w-full max-h-72 object-cover mb-2"
-                style={{
-                  borderRadius: 0,
-                }}
-              />
-            ))}
-            {/* 만약 진료 설명(description)이나 infoTab 등을 이미지 아래에 같이 노출하고 싶다면 아래에 추가 */}
-            {treatment.description && (
-              <ul className="mt-4 mb-2 list-disc list-inside text-gray-700 text-sm space-y-1">
-                {treatment.description.map((desc: string, i: number) => (
-                  <li key={i}>{desc}</li>
-                ))}
-              </ul>
-            )}
-            {treatment.infoTab && (
-              <ul className="mb-4 list-disc list-inside text-gray-500 text-sm space-y-1">
-                {treatment.infoTab.map((desc: string, i: number) => (
-                  <li key={i}>{desc}</li>
-                ))}
-              </ul>
-            )}
+        {/* 병원 정보 카드 */}
+        <HospitalInfoCard hospital={MOCK_HOSPITAL} onClick={() => navigate("/hospital/1")} />
+
+        {/* 메인 내용 */}
+        <div>
+          {/* 진료명 및 금액 */}
+          <div className="font-bold text-xl mt-5 mb-1">{treatment.name}</div>
+          <div className="text-2xl font-extrabold mb-2">{treatment.price}</div>
+          <div className="flex items-center gap-1 text-yellow-500 mb-3">
+            <Star fill="#FACC15" stroke="#FACC15" size={18} className="mr-0.5" />
+            <span className="text-base font-semibold text-gray-700">{MOCK_HOSPITAL.rating}</span>
           </div>
-        )}
-        {/* 후기 탭 */}
-        {tab === "review" && (
-          <ReviewList reviews={treatment.reviews} treatmentName={treatment.name} />
-        )}
+          {/* 탭 UI */}
+          <div className="flex border-b border-gray-200 my-2">
+            {TABS.map(t => (
+              <button
+                key={t.value}
+                className={`flex-1 px-1 py-2 font-semibold text-center transition border-b-2 ${
+                  tab === t.value
+                    ? "border-gray-900 text-gray-900"
+                    : "border-transparent text-gray-400"
+                }`}
+                onClick={() => setTab(t.value as "info" | "review")}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+          {tab === "info" && (
+            <div className="flex flex-col pt-4 pb-8">
+              {/* 진료 이미지 여러장 - 밑 텍스트 삭제 및 간격 최소화 */}
+              {INFO_IMAGES.map((url, idx) => (
+                <img
+                  key={idx}
+                  src={url}
+                  alt="" // 불필요한 alt/텍스트 제거
+                  className="w-full max-h-72 object-cover"
+                  style={{
+                    borderRadius: 0,
+                    marginBottom: idx === INFO_IMAGES.length - 1 ? 0 : 8, // 마지막 이미지는 mb 0
+                  }}
+                />
+              ))}
+              {/* 설명/추가정보 */}
+              {treatment.description && (
+                <ul className="mt-4 mb-2 list-disc list-inside text-gray-700 text-sm space-y-1">
+                  {treatment.description.map((desc: string, i: number) => (
+                    <li key={i}>{desc}</li>
+                  ))}
+                </ul>
+              )}
+              {treatment.infoTab && (
+                <ul className="mb-4 list-disc list-inside text-gray-500 text-sm space-y-1">
+                  {treatment.infoTab.map((desc: string, i: number) => (
+                    <li key={i}>{desc}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+          {/* 후기 탭 */}
+          {tab === "review" && (
+            <ReviewList reviews={treatment.reviews} treatmentName={treatment.name} />
+          )}
+        </div>
       </div>
+
       {/* 예약 버튼 (Fixed Bottom) */}
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md p-4 bg-white border-t z-10">
         <button

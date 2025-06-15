@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -106,8 +105,19 @@ const TreatmentDetail = () => {
           />
         </div>
       </div>
-      {/* 병원 정보 카드 */}
-      <div className="flex items-center px-4 py-3 gap-3 border-b border-gray-200">
+      {/* 병원 정보 카드 - 카드 전체가 버튼 역할 */}
+      <div
+        role="button"
+        tabIndex={0}
+        className="flex items-center px-4 py-3 gap-3 border-b border-gray-200 cursor-pointer transition hover:bg-gray-50 active:bg-gray-100 outline-none"
+        onClick={() => navigate("/hospital/1")}
+        onKeyDown={e => {
+          if (e.key === "Enter" || e.key === " ") {
+            navigate("/hospital/1");
+          }
+        }}
+        aria-label="병원 상세로 이동"
+      >
         <div className="overflow-hidden w-10 h-10 border" style={{ borderRadius: 0 }}>
           <img
             src={MOCK_HOSPITAL.thumbnail}
@@ -120,14 +130,6 @@ const TreatmentDetail = () => {
           <span className="text-base font-semibold">{MOCK_HOSPITAL.name}</span>
           <span className="text-xs text-gray-500">{MOCK_HOSPITAL.location}</span>
         </div>
-        <button
-          aria-label="병원 바로가기"
-          className="flex items-center justify-center p-1"
-          onClick={() => navigate("/hospital/1")}
-        >
-          <span className="sr-only">병원페이지로 이동</span>
-          <svg width="24" height="24" fill="none"><path d="M9 18l6-6-6-6" stroke="#212121" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-        </button>
       </div>
       {/* 메인 내용 */}
       <div className="px-4">
@@ -267,4 +269,3 @@ const TreatmentDetail = () => {
 };
 
 export default TreatmentDetail;
-

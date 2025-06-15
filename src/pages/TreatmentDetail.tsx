@@ -68,21 +68,35 @@ const TreatmentDetail = () => {
         </div>
         {/* 진료 정보 탭 */}
         {tab === "info" && (
-          <div className="w-full">
-            <div className="max-h-[400px] overflow-y-auto flex flex-col pt-4 pb-8">
-              {INFO_IMAGES.map((url, idx) => (
-                <img
-                  key={idx}
-                  src={url}
-                  alt={`진료 이미지 ${idx + 1}`}
-                  className="w-full max-h-72 object-cover"
-                  style={{
-                    borderRadius: 0,
-                    marginBottom: 0,
-                  }}
-                />
-              ))}
-            </div>
+          // 탭 영역 전체를 스크롤 가능하도록 height/overflow 지정 (모바일에서 적절하게 보이도록!)
+          <div className="flex flex-col pt-4 pb-8" style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+            {/* 진료 설명 등 추가 콘텐츠가 있다면 여기에 배치 */}
+            {INFO_IMAGES.map((url, idx) => (
+              <img
+                key={idx}
+                src={url}
+                alt={`진료 이미지 ${idx + 1}`}
+                className="w-full max-h-72 object-cover mb-2"
+                style={{
+                  borderRadius: 0,
+                }}
+              />
+            ))}
+            {/* 만약 진료 설명(description)이나 infoTab 등을 이미지 아래에 같이 노출하고 싶다면 아래에 추가 */}
+            {treatment.description && (
+              <ul className="mt-4 mb-2 list-disc list-inside text-gray-700 text-sm space-y-1">
+                {treatment.description.map((desc: string, i: number) => (
+                  <li key={i}>{desc}</li>
+                ))}
+              </ul>
+            )}
+            {treatment.infoTab && (
+              <ul className="mb-4 list-disc list-inside text-gray-500 text-sm space-y-1">
+                {treatment.infoTab.map((desc: string, i: number) => (
+                  <li key={i}>{desc}</li>
+                ))}
+              </ul>
+            )}
           </div>
         )}
         {/* 후기 탭 */}

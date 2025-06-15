@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Star } from "lucide-react";
@@ -64,14 +63,26 @@ const TreatmentDetail = () => {
             ))}
           </div>
           {tab === "info" && (
-            <div className="text-center text-gray-600 py-8">
-              후디 인스타에서 확인할 수 있습니다!
+            <div className="flex flex-col pt-3 pb-8">
+              {INFO_IMAGES.map((url, idx) => (
+                <img
+                  key={idx}
+                  src={url}
+                  alt=""
+                  className="w-full h-auto object-cover"
+                  style={{
+                    borderRadius: 0,
+                    marginBottom: 0,
+                    // 이미지간 겹침 없이 margin 0, 모바일 밀착 느낌
+                    display: "block",
+                  }}
+                  draggable={false}
+                />
+              ))}
             </div>
           )}
           {tab === "review" && (
-            <div className="text-center text-gray-600 py-8">
-              후디 인스타에서 확인할 수 있습니다!
-            </div>
+            <ReviewList reviews={treatment.reviews} treatmentName={treatment.name} />
           )}
         </div>
       </div>

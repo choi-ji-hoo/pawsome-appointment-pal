@@ -136,11 +136,13 @@ const Index = () => {
         </div>
         {/* 종 토글: 이쁘게 개선 */}
         <SpeciesToggle selectedSpecies={selectedSpecies} setSelectedSpecies={setSelectedSpecies} />
-        {/* 카테고리 카드형 영역 이쁘게 개선 */}
+        {/* 카테고리 탭 & 진료과목 영역 by 이미지 참고 */}
         <CategoryFunnelToggle
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
           funnelList={funnelList}
+          selectedSpecies={selectedSpecies}
+          setSelectedSpecies={setSelectedSpecies}
         />
       </header>
       <main className="flex-1 w-full">

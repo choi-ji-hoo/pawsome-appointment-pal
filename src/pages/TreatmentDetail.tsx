@@ -1,7 +1,8 @@
+
 import * as React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Star, ArrowLeft } from "lucide-react";
+import { Star } from "lucide-react";
 
 // Mock 데이터 동일
 const MOCK_HOSPITAL = {
@@ -29,15 +30,22 @@ const TREATMENTS = [
         user: "대형집사",
         rate: 5,
         text: "설명도 자세하고 예약부터 결과 안내까지 편리했어요.",
+        images: [
+          "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=crop&w=200&q=80",
+          "https://images.unsplash.com/photo-1721322800607-8c38375eef04?auto=format&fit=crop&w=200&q=80",
+          "https://images.unsplash.com/photo-1582562124811-c09040d0a901?auto=format&fit=crop&w=200&q=80",
+        ],
       },
       {
         user: "양이주인",
         rate: 5,
         text: "병원 시설이 최신이라서 안심하고 맡길 수 있었어요.",
+        images: [
+          "https://images.unsplash.com/photo-1582562124811-c09040d0a901?auto=format&fit=crop&w=200&q=80",
+        ],
       },
     ],
   },
-  // ...추가 진료 mock
   {
     id: 2,
     name: "고양이 건강검진",
@@ -55,13 +63,15 @@ const TABS = [
   { label: "진료 정보", value: "info" },
   { label: "후기", value: "review" },
 ];
-// 진료 이미지 (하단에 상세 이미지로 노출 - 사용자가 교체 가능)
 const INFO_IMAGES = [
   "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=400&q=80",
   "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=400&q=80",
   "https://images.unsplash.com/photo-1523712999610-f77fbcfc3843?auto=format&fit=crop&w=400&q=80",
   "https://images.unsplash.com/photo-1501854140801-50d01698950b?auto=format&fit=crop&w=400&q=80",
 ];
+
+const placeholderAvatar =
+  "https://api.dicebear.com/8.x/thumbs/svg?seed=Milo&backgroundType=gradientLinear";
 
 const TreatmentDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -81,7 +91,8 @@ const TreatmentDetail = () => {
           onClick={() => navigate("/")}
           className="rounded-full hover:bg-gray-100 size-9 flex items-center justify-center"
         >
-          <ArrowLeft size={22} />
+          <span className="sr-only">뒤로가기</span>
+          <svg width="22" height="22" fill="none"><path d="M15 18l-6-6 6-6" stroke="#212121" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
         </button>
       </div>
       {/* 썸네일 (상단 배경) */}
@@ -146,7 +157,6 @@ const TreatmentDetail = () => {
         {/* 진료 정보 탭 */}
         {tab === "info" && (
           <div className="w-full">
-            {/* 진료 상세 이미지 - 세로 스크롤 가능 (여백, 간격, 라운딩 없음) */}
             <div className="max-h-[400px] overflow-y-auto flex flex-col pt-4 pb-8">
               {INFO_IMAGES.map((url, idx) => (
                 <img
@@ -156,7 +166,7 @@ const TreatmentDetail = () => {
                   className="w-full max-h-72 object-cover"
                   style={{
                     borderRadius: 0,
-                    marginBottom: 0, // 이미지 하단 마진 제거
+                    marginBottom: 0,
                   }}
                 />
               ))}
@@ -167,20 +177,79 @@ const TreatmentDetail = () => {
         {tab === "review" && (
           <>
             <div className="text-sm font-medium mb-2 mt-3">후기</div>
-            <ul className="flex flex-col gap-3 mt-2">
+            <ul className="flex flex-col gap-4 mt-2">
               {treatment.reviews.length === 0 && (
                 <li className="text-gray-400">아직 후기가 없습니다.</li>
               )}
               {treatment.reviews.map((review, i) => (
-                <li key={i} className="bg-gray-50 rounded-lg px-4 py-3 border flex flex-col">
+                <li
+                  key={i}
+                  className="rounded-xl px-4 py-3 border flex flex-col bg-[#FCFCFC] shadow-sm"
+                  style={{ borderRadius: 16, borderWidth: 1, borderColor: "#eee" }}
+                >
                   <div className="flex items-center gap-2 mb-1">
-                    <span className="text-base font-semibold">{review.user}</span>
-                    <span className="text-yellow-500 text-sm">
-                      {"★".repeat(review.rate)}
-                      {"☆".repeat(5 - review.rate)}
+                    {/* 아바타 */}
+                    <img
+                      src={placeholderAvatar}
+                      alt="avatar"
+                      className="w-7 h-7 rounded-full border bg-gray-100"
+                    />
+                    <span className="text-sm font-semibold">{review.user}</span>
+                    {/* 별점 */}
+                    <span className="flex items-center text-yellow-500 text-base ml-1">
+                      {Array(5)
+                        .fill(0)
+                        .map((_, idx) =>
+                          idx < review.rate ? (
+                            <Star
+                              key={idx}
+                              size={15}
+                              fill="#FFD700"
+                              stroke="#FFD700"
+                            />
+                          ) : (
+                            <Star
+                              key={idx}
+                              size={15}
+                              fill="none"
+                              stroke="#FFD700"
+                            />
+                          )
+                        )}
+                    </span>
+                    {/* more ... 아이콘 대체: > */}
+                    <span className="ml-auto text-gray-400 text-lg" aria-label="More">
+                      ...
                     </span>
                   </div>
-                  <span className="text-gray-700 text-sm">{review.text}</span>
+                  {/* 리뷰 텍스트 */}
+                  <span className="text-gray-700 text-[15px] leading-relaxed mb-2">{review.text}</span>
+                  {/* 첨부 이미지들 */}
+                  {review.images && review.images.length > 0 && (
+                    <div className="flex flex-row gap-1 mb-2">
+                      {review.images.map((img, idx) => (
+                        <img
+                          key={idx}
+                          src={img}
+                          alt="리뷰 이미지"
+                          className="rounded-md border object-cover"
+                          style={{
+                            width: 80,
+                            height: 80,
+                            borderRadius: 8,
+                            borderWidth: 1,
+                            borderColor: "#eee",
+                          }}
+                        />
+                      ))}
+                    </div>
+                  )}
+                  {/* 진료명 배지 */}
+                  <div className="mt-1 flex">
+                    <span className="bg-[#F3F4F6] text-xs px-3 py-1 rounded-md font-semibold text-gray-700">
+                      {treatment.name}
+                    </span>
+                  </div>
                 </li>
               ))}
             </ul>
@@ -198,3 +267,4 @@ const TreatmentDetail = () => {
 };
 
 export default TreatmentDetail;
+

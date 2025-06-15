@@ -1,21 +1,16 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import Status from "./pages/Status";
-import My from "./pages/My";
 import TreatmentDetail from "./pages/TreatmentDetail";
 import HospitalDetail from "./pages/HospitalDetail";
-// TabsBar import removed
 
 const queryClient = new QueryClient();
 
 const MainLayout = () => {
-  // location and showTabsBar logic removed
   return (
     <div className="min-h-screen w-full bg-gray-50 flex flex-col">
       {/* Centered fixed-width layout for content */}
@@ -25,8 +20,6 @@ const MainLayout = () => {
             <Route path="/" element={<Index />} />
             <Route path="/treatment/:id" element={<TreatmentDetail />} />
             <Route path="/hospital/:id" element={<HospitalDetail />} />
-            <Route path="/status" element={<Status />} />
-            <Route path="/my" element={<My />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

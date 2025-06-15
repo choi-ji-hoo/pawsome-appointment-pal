@@ -7,6 +7,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Status from "./pages/Status";
 import My from "./pages/My";
+import TreatmentDetail from "./pages/TreatmentDetail";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,7 @@ const App = () => (
         <div className="bg-white min-h-screen w-full max-w-md mx-auto shadow-lg relative">
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/treatment/:id" element={<TreatmentDetail />} />
             <Route path="/status" element={<Status />} />
             <Route path="/my" element={<My />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

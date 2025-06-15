@@ -1,10 +1,10 @@
-
 import * as React from "react";
 import { Dog, Cat } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import TabsBar from "@/components/TabsBar";
+import { useNavigate } from "react-router-dom";
 
 const SPECIES = [
   { label: "강아지", icon: <Dog size={20} className="text-blue-400 mr-1" /> },
@@ -64,8 +64,8 @@ const TREATMENTS = [
 
 const Index = () => {
   const [selectedSpecies, setSelectedSpecies] = React.useState("강아지");
-  // 검색어 상태, 추후 확장을 위해 준비 (현재는 UI만 동작)
   const [search, setSearch] = React.useState("");
+  const navigate = useNavigate();
 
   const filteredTreatments = React.useMemo(
     () => TREATMENTS.filter((t) => t.species === selectedSpecies),
@@ -126,7 +126,8 @@ const Index = () => {
               filteredTreatments.map((treat) => (
                 <li
                   key={treat.id}
-                  className="flex bg-white rounded-xl shadow-md items-center gap-4 p-3 border hover:scale-[1.01] transition"
+                  className="flex bg-white rounded-xl shadow-md items-center gap-4 p-3 border hover:scale-[1.01] transition cursor-pointer"
+                  onClick={() => navigate(`/treatment/${treat.id}`)}
                 >
                   <div className="flex-shrink-0">
                     <img
@@ -159,4 +160,3 @@ const Index = () => {
 };
 
 export default Index;
-

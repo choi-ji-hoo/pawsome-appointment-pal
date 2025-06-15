@@ -1,4 +1,5 @@
 
+
 import * as React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Star } from "lucide-react";
@@ -35,7 +36,7 @@ const TreatmentDetail = () => {
           <img
             src={MOCK_HOSPITAL.thumbnail}
             alt={MOCK_HOSPITAL.name}
-            className="w-full h-[200px] object-cover"
+            className="w-full h-[240px] object-cover"
             style={{ borderRadius: 0 }}
           />
         </div>
@@ -108,3 +109,4 @@ const TreatmentDetail = () => {
 };
 
 export default TreatmentDetail;
+

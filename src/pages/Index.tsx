@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -13,6 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar as ShadcnCalendar } from "@/components/ui/calendar";
 import { toast } from "@/hooks/use-toast";
+import TabsBar from "@/components/TabsBar";
 
 const AppointmentSchema = z.object({
   ownerName: z.string().min(2, "이름을 입력해주세요."),
@@ -72,8 +72,8 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen py-12 bg-gradient-to-br from-blue-50 via-white to-cyan-100">
-      <div className="max-w-5xl mx-auto flex flex-col gap-12">
+    <div className="bg-gradient-to-br from-blue-50 via-white to-cyan-100 min-h-screen w-full max-w-md mx-auto flex flex-col pb-20">
+      <div className="flex-1 w-full">
         {/* Header */}
         <header className="flex flex-col md:flex-row items-center justify-between gap-4 mb-4 px-4">
           <div className="flex items-center gap-3">
@@ -281,6 +281,7 @@ const Index = () => {
           </div>
         </section>
       </div>
+      <TabsBar />
     </div>
   );
 };

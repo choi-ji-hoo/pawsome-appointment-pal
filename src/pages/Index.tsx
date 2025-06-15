@@ -1,3 +1,4 @@
+
 import * as React from "react";
 import { Dog, Cat, Calendar, Syringe, HeartPulse, Bone } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -100,9 +101,8 @@ const Index = () => {
 
   return (
     <div className="bg-white min-h-screen max-w-md mx-auto flex flex-col relative pb-20 font-sans">
-      {/* 상단 배너 제거, 상단 패딩만 조절 */}
+      {/* 상단 패딩 및 검색창 */}
       <header className="w-full pt-6 pb-0 px-4 flex flex-col gap-4">
-        {/* 검색창 */}
         <div className="relative w-full">
           <Input
             placeholder="진료명, 항목명으로 검색"
@@ -125,13 +125,10 @@ const Index = () => {
             </svg>
           </span>
         </div>
-        {/* 베너 (슬라이드 캐러셀) */}
         <div className="mt-0">
           <BannerCarousel />
         </div>
-        {/* 퍼널 카테고리 */}
         <FunnnelSection />
-        {/* 강아지/고양이 토글 */}
         <div className="flex justify-center gap-3 mt-3">
           {SPECIES.map((sp) => (
             <Button
@@ -163,6 +160,7 @@ const Index = () => {
             </div>
             <div className="text-xs text-gray-400">{filteredTreatments.length}개</div>
           </div>
+          {/* --- 카드 리스트 --- */}
           <ul className="flex flex-col gap-4">
             {filteredTreatments.length === 0 ? (
               <li className="text-center text-gray-400 py-8 text-base">해당 동물의 진료가 없습니다.</li>
@@ -176,41 +174,48 @@ const Index = () => {
                 .map((treat) => (
                   <li
                     key={treat.id}
-                    className="bg-white rounded-2xl shadow border border-gray-100 p-0 overflow-hidden cursor-pointer hover:scale-[1.01] transition group"
-                    style={{ minHeight: 230, maxWidth: 420 }}
+                    className="bg-white rounded-2xl shadow border border-gray-100 overflow-hidden cursor-pointer hover:scale-[1.01] transition group"
+                    style={{ maxWidth: 420, minHeight: 340, display: "flex", flexDirection: "column" }}
                     onClick={() => navigate(`/treatment/${treat.id}`)}
                   >
-                    {/* 진료 썸네일 */}
-                    <div className="w-full h-36 bg-gray-50 overflow-hidden flex items-center justify-center">
+                    {/* 썸네일: 비율 고정 */}
+                    <div
+                      className="w-full aspect-[4/3] bg-gray-50 overflow-hidden flex items-center justify-center"
+                      style={{
+                        minHeight: 168,
+                        maxHeight: 220,
+                      }}
+                    >
                       <img
                         src={treat.thumbnail}
                         alt={treat.name}
-                        className="w-full h-full object-cover object-center rounded-none"
-                        style={{ maxHeight: 144 }}
+                        className="w-full h-full object-cover object-center"
+                        draggable={false}
                       />
                     </div>
-                    {/* 병원명/주소 부분 */}
-                    <div className="flex items-center gap-2 px-4 mt-3">
-                      <img
-                        src="https://images.unsplash.com/photo-1466721591366-2d5fba72006d?auto=format&fit=facearea&w=48&h=48"
-                        alt="병원 썸네일"
-                        className="w-8 h-8 rounded-full border bg-gray-100 object-cover"
-                      />
-                      <div className="flex flex-col min-w-0 flex-1">
-                        <div className="font-bold text-gray-900 text-sm truncate">후디 동물병원</div>
-                        <div className="text-xs text-gray-400 truncate">울산 남구</div>
+                    {/* 하단 내용 */}
+                    <div className="flex flex-col px-5 pt-4 pb-4 bg-white" style={{ flex: 1 }}>
+                      <div className="flex items-center gap-2 mb-1">
+                        <img
+                          src="https://images.unsplash.com/photo-1466721591366-2d5fba72006d?auto=format&fit=facearea&w=48&h=48"
+                          alt="병원 썸네일"
+                          className="w-7 h-7 rounded-full border bg-gray-100 object-cover"
+                          draggable={false}
+                        />
+                        <span className="font-bold text-gray-900 text-sm truncate">후디 동물병원</span>
+                        <span className="text-xs text-gray-400 truncate ml-1">울산 남구</span>
                       </div>
-                      <span className="ml-auto text-gray-300">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" className="inline">{/*→*/}<polyline points="9 18 15 12 9 6" /></svg>
-                      </span>
-                    </div>
-                    {/* 진료명, 가격, 평점 */}
-                    <div className="px-4 pb-4 pt-2">
-                      <div className="font-bold text-base text-neutral-900 mt-1">{treat.name}</div>
-                      <div className="text-xl font-extrabold text-gray-900 mt-1">500,000원</div>
-                      <div className="flex items-center gap-1 mt-1">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="#FACC15" stroke="#FACC15" strokeWidth="2" className="mr-0.5"><polygon points="12 2 15 8.7 22 9.3 17 14.1 18.3 21 12 17.7 5.7 21 7 14.1 2 9.3 9 8.7 12 2"/></svg>
-                        <span className="font-semibold text-sm text-gray-700">5.0</span>
+                      <div className="flex-1 flex flex-col justify-start">
+                        <div className="font-extrabold text-lg text-gray-900 leading-tight mt-1">{treat.name}</div>
+                        <div className="text-xs text-gray-500 mt-1 truncate">{treat.items && treat.items.join(" · ")}</div>
+                      </div>
+                      {/* 진료 가격/평점 등 하단 */}
+                      <div className="flex items-center justify-between mt-3">
+                        <span className="text-xl font-extrabold text-blue-900">{treat.price ? treat.price : "500,000원"}</span>
+                        <span className="flex items-center gap-1">
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="#FACC15" stroke="#FACC15" strokeWidth="2" className="mr-0.5"><polygon points="12 2 15 8.7 22 9.3 17 14.1 18.3 21 12 17.7 5.7 21 7 14.1 2 9.3 9 8.7 12 2"/></svg>
+                          <span className="font-semibold text-base text-gray-700">5.0</span>
+                        </span>
                       </div>
                     </div>
                   </li>

@@ -3,150 +3,237 @@ import * as React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Heart, ArrowLeft, Star } from "lucide-react";
 
-// 진료 항목 예시 데이터
+// Mock 병원 정보 및 옵션
+const MOCK_HOSPITAL = {
+  name: "후디 동물병원",
+  location: "울산 남구",
+  thumbnail:
+    "https://images.unsplash.com/photo-1465379944081-7f47de8d74ac?auto=format&fit=facearea&w=480&h=300",
+  rating: 5.0,
+};
+
+const OPTIONS = [
+  {
+    label: "스탠다드 건강검진 (기본형)",
+    desc: "5대 혈관, 간기능검사와 주요 항목 검사를 포함합니다.",
+    price: 245,
+    checked: true,
+  },
+  {
+    label: "프리미엄 건강검진 (고급형)",
+    desc: "기본 항목 + 초음파 진단 및 심혈관 정밀 촬영이 추가됩니다.",
+    price: 315,
+    checked: false,
+  },
+  {
+    label: "프리미엄플러스 건강검진 (최상위)",
+    desc: "모든 고급 진단 + MRI 및 CT 특수 촬영까지 가능합니다.",
+    price: 425,
+    checked: false,
+  },
+];
+
+const ADDITIONALS = [
+  {
+    label: "심장병 특화상담",
+    desc: "심장병 위험군 동물에 한해 전문 수의사가 상담합니다.",
+    price: 50,
+  },
+  {
+    label: "결과 방문상담",
+    desc: "검사 결과에 대한 1:1 방문상담이 추가됩니다.",
+    price: 45,
+  },
+];
+
 const TREATMENTS = [
   {
     id: 1,
-    name: "종합검진",
-    species: "강아지",
-    price: "120,000원",
-    thumbnail: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=facearea&w=160&h=160",
-    items: ["내과", "혈액·소변검사", "영상의학", "기초초음파", "피부·소양증"],
-    hours: "월~금 9:00 - 18:00",
+    name: "대형견 건강검진",
+    price: "500,000원",
+    description: [
+      "대형견 전용 건강검진입니다.",
+      "25KG 이상일 경우 진료 진행이 가능합니다.",
+    ],
+    infoTab: [
+      "진료 예약은 사전 전화 문의 바랍니다.",
+      "검진 전 8시간 금식이 필요합니다."
+    ],
     reviews: [
-      { user: "강아지집사", text: "진료가 꼼꼼하고 친절해요!", rate: 5 },
-      { user: "삼색이", text: "검진비가 합리적이고 설명을 잘 해줍니다.", rate: 4 }
-    ]
+      {
+        user: "대형집사",
+        rate: 5,
+        text: "설명도 자세하고 예약부터 결과 안내까지 편리했어요.",
+      },
+      {
+        user: "양이주인",
+        rate: 5,
+        text: "병원 시설이 최신이라서 안심하고 맡길 수 있었어요.",
+      },
+    ],
   },
-  {
-    id: 2,
-    name: "예방접종/건강상담",
-    species: "강아지",
-    price: "30,000원~",
-    thumbnail: "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=facearea&w=160&h=160",
-    items: ["백신접종", "구충", "정기상담"],
-    hours: "월~토 9:30 - 18:00",
-    reviews: [
-      { user: "댕댕댕", text: "정기 건강상담이 정말 좋아요.", rate: 5 }
-    ]
-  },
-  {
-    id: 3,
-    name: "치과진료",
-    species: "강아지",
-    price: "80,000원~",
-    thumbnail: "https://images.unsplash.com/photo-1466721591366-2d5fba72006d?auto=format&fit=facearea&w=160&h=160",
-    items: ["스케일링", "발치", "치과상담"],
-    hours: "매주 토요일 10:00 - 15:00",
-    reviews: [
-      { user: "샤샤", text: "치과 시술 후 친절한 조치!", rate: 5 }
-    ]
-  },
-  {
-    id: 4,
-    name: "종합검진",
-    species: "고양이",
-    price: "130,000원",
-    thumbnail: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?auto=format&fit=facearea&w=160&h=160",
-    items: ["이비인후과", "피부진단", "혈액·소변검사", "영상의학"],
-    hours: "월~금 10:00 - 19:00",
-    reviews: [
-      { user: "냥집사", text: "정밀 진료에 만족합니다.", rate: 5 }
-    ]
-  },
-  {
-    id: 5,
-    name: "예방접종/건강상담",
-    species: "고양이",
-    price: "35,000원~",
-    thumbnail: "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=facearea&w=160&h=160",
-    items: ["백신접종", "정기상담"],
-    hours: "월~토 10:00 - 18:00",
-    reviews: [
-      { user: "고미", text: "비용 부담 적고 꼼꼼해요.", rate: 4 }
-    ]
-  },
-  {
-    id: 6,
-    name: "특수동물 진료",
-    species: "기타",
-    price: "상담 후 안내",
-    thumbnail: "https://images.unsplash.com/photo-1452378174528-3090a4bba7b2?auto=format&fit=facearea&w=160&h=160",
-    items: ["토끼", "조류", "설치류"],
-    hours: "예약제 (전화 문의)",
-    reviews: [
-      { user: "토끼주인", text: "희귀동물도 잘 봐주심", rate: 5 }
-    ]
-  }
+  // ...추가 진료 mock
+];
+
+const TABS = [
+  { label: "진료 정보", value: "info" },
+  { label: "후기", value: "review" },
 ];
 
 const TreatmentDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const treatment = TREATMENTS.find(t => t.id === Number(id));
+  const [tab, setTab] = React.useState<"info" | "review">("info");
+  const treatment = TREATMENTS.find(t => t.id === Number(id)) || TREATMENTS[0];
 
-  if (!treatment) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen">
-        <div className="text-lg font-bold text-blue-700">진료 정보를 찾을 수 없습니다.</div>
-        <Button className="mt-8" variant="outline" onClick={() => navigate(-1)}>
-          뒤로가기
-        </Button>
-      </div>
-    );
-  }
+  // 메인 색상/테마
+  const mainColor = "text-green-900";
+  const sectionBg = "bg-gray-50";
+  const optionSelected = "bg-green-800 bg-opacity-10 border-green-800";
+  const optionUnselected = "bg-white";
 
   return (
-    <div className="bg-white min-h-screen max-w-md mx-auto pb-20">
-      <header className="flex items-center px-4 pt-8 gap-3">
-        <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="mr-2">
-          <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
-        </Button>
-        <h1 className="text-lg font-bold text-blue-800">{treatment.name}</h1>
-      </header>
-      <main className="pt-6 px-4 max-w-md mx-auto">
-        <Card>
-          <CardHeader className="items-center">
-            <img
-              src={treatment.thumbnail}
-              alt={treatment.name}
-              className="w-24 h-24 rounded-xl object-cover border bg-gray-50"
-            />
-            <CardTitle className="mt-2 text-blue-700 text-xl">{treatment.name}</CardTitle>
-            <div className="text-base text-blue-600 font-semibold">{treatment.price}</div>
-            <div className="text-sm mt-2 text-gray-500">{treatment.hours}</div>
-          </CardHeader>
-          <CardContent>
-            <ul className="mb-4 flex flex-wrap gap-2">
-              {treatment.items.map((item, i) => (
-                <li key={i} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
-                  {item}
+    <div className="relative min-h-screen bg-white pb-28 max-w-md mx-auto">
+      {/* Top header */}
+      <div className="flex items-center p-4 gap-2">
+        <button
+          aria-label="뒤로가기"
+          onClick={() => navigate(-1)}
+          className="rounded-full hover:bg-gray-100 size-9 flex items-center justify-center"
+        >
+          <ArrowLeft size={22} />
+        </button>
+      </div>
+      {/* 병원 / 썸네일 */}
+      <div className="px-4">
+        <div className="relative overflow-hidden rounded-xl">
+          <img
+            src={MOCK_HOSPITAL.thumbnail}
+            alt={MOCK_HOSPITAL.name}
+            className="w-full h-[156px] object-cover"
+          />
+          {/* 병원 카드 */}
+          <div className="absolute left-3 bottom-3 bg-white/80 backdrop-blur px-4 py-2 rounded-lg flex gap-3 items-center shadow-md">
+            <span className="rounded-full overflow-hidden w-8 h-8 border">
+              <img
+                src={MOCK_HOSPITAL.thumbnail}
+                alt={MOCK_HOSPITAL.name}
+                className="object-cover w-8 h-8"
+              />
+            </span>
+            <div>
+              <div className="text-sm font-semibold">{MOCK_HOSPITAL.name}</div>
+              <div className="text-xs text-gray-500">{MOCK_HOSPITAL.location}</div>
+            </div>
+            <button className="ml-2 p-1"><ArrowLeft style={{ opacity: 0 }} /></button>
+          </div>
+        </div>
+      </div>
+      {/* 메인컨텐츠 */}
+      <div className="px-4 mt-8">
+        <div className="flex items-center gap-1">
+          <div className={`font-bold text-xl ${mainColor}`}>{treatment.name}</div>
+        </div>
+        <div className="text-lg font-semibold mt-2 mb-2">{treatment.price}</div>
+        <div className="flex items-center gap-1 text-yellow-500 mb-4">
+          <Star fill="#FACC15" stroke="#FACC15" size={18} className="mr-0.5" />
+          <span className="text-base font-semibold">{MOCK_HOSPITAL.rating}</span>
+        </div>
+        {/* 탭 UI */}
+        <div className="flex border-b border-gray-200 my-4">
+          {TABS.map(t => (
+            <button
+              key={t.value}
+              className={`flex-1 px-1 py-2 font-semibold text-center transition border-b-2 ${
+                tab === t.value
+                  ? "border-green-900 text-green-900"
+                  : "border-transparent text-gray-400"
+              }`}
+              onClick={() => setTab(t.value as "info" | "review")}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+        {/* 진료 정보 탭 */}
+        {tab === "info" && (
+          <>
+            <div className="text-sm font-medium mb-2 mt-3">진료 상세 설명</div>
+            <div className="bg-gray-100 rounded-lg p-3 text-sm mb-4">
+              {treatment.description.map((desc, i) => (
+                <div key={i}>{desc}</div>
+              ))}
+            </div>
+            <div className="text-base font-semibold mb-2">옵션 선택</div>
+            <div className="flex flex-col gap-2">
+              {OPTIONS.map((option, idx) => (
+                <div
+                  key={option.label}
+                  className={`rounded-xl border px-4 py-3 ${
+                    option.checked ? optionSelected : optionUnselected
+                  }`}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold">{idx + 1}. {option.label}</span>
+                    <span className="font-semibold text-green-900">{option.price}천원</span>
+                  </div>
+                  <div className="text-sm text-gray-500 mt-1">{option.desc}</div>
+                </div>
+              ))}
+            </div>
+            <div className="text-base font-semibold mt-5 mb-2">선택 옵션</div>
+            <div className="flex flex-col gap-2">
+              {ADDITIONALS.map((opt, idx) => (
+                <div
+                  className="rounded-xl border px-4 py-3 bg-white"
+                  key={opt.label}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">
+                      {idx + 1}. {opt.label}
+                    </span>
+                    <span className="font-medium text-green-900">
+                      {opt.price}천원
+                    </span>
+                  </div>
+                  <div className="text-sm text-gray-500 mt-1">{opt.desc}</div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+        {/* 후기 탭 */}
+        {tab === "review" && (
+          <>
+            <div className="text-sm font-medium mb-2 mt-3">후기</div>
+            <ul className="flex flex-col gap-3 mt-2">
+              {treatment.reviews.length === 0 && (
+                <li className="text-gray-400">아직 후기가 없습니다.</li>
+              )}
+              {treatment.reviews.map((review, i) => (
+                <li key={i} className="bg-gray-50 rounded-lg px-4 py-3 border flex flex-col">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-base font-semibold">{review.user}</span>
+                    <span className="text-yellow-500 text-sm">
+                      {"★".repeat(review.rate)}
+                      {"☆".repeat(5 - review.rate)}
+                    </span>
+                  </div>
+                  <span className="text-gray-700 text-sm">{review.text}</span>
                 </li>
               ))}
             </ul>
-            <div className="mb-4">
-              <div className="font-bold text-blue-800 mb-2">병원 후기</div>
-              <ul className="flex flex-col gap-2">
-                {treatment.reviews.map((review, rIdx) => (
-                  <li key={rIdx} className="bg-gray-50 p-3 rounded-md border flex flex-col">
-                    <div className="flex gap-2 items-center">
-                      <span className="font-semibold text-blue-600">{review.user}</span>
-                      <span className="text-yellow-500">{'★'.repeat(review.rate)}{'☆'.repeat(5-review.rate)}</span>
-                    </div>
-                    <span className="text-sm text-gray-800 mt-1">{review.text}</span>
-                  </li>
-                ))}
-                {treatment.reviews.length === 0 && (
-                  <li className="text-gray-400">아직 후기가 없습니다.</li>
-                )}
-              </ul>
-            </div>
-          </CardContent>
-        </Card>
-      </main>
+          </>
+        )}
+      </div>
+      {/* 예약 버튼 */}
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md p-4 bg-white border-t z-10">
+        <Button className="w-full h-12 text-base font-bold rounded-xl bg-gray-900 hover:bg-gray-700">
+          예약하기
+        </Button>
+      </div>
     </div>
   );
 };

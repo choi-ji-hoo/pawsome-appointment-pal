@@ -161,15 +161,18 @@ const Index = () => {
               type="button"
               variant={selectedSpecies === sp.label ? "default" : "outline"}
               className={cn(
-                "flex-1 font-bold transition-all px-4 py-2 text-base rounded-full border-2",
+                "flex-1 min-w-0 flex items-center justify-center gap-1 font-bold transition-all px-4 py-2 text-base rounded-full border-2",
                 selectedSpecies === sp.label
                   ? "ring-2 ring-blue-400 bg-blue-50 border-blue-200 text-blue-700"
                   : "border-gray-200 bg-white hover:bg-gray-50 text-gray-500"
               )}
               onClick={() => setSelectedSpecies(sp.label)}
+              style={{ flex: 1 }}
             >
-              {sp.icon}
-              {sp.label}
+              <span className="flex items-center gap-1 w-full justify-center">
+                {sp.icon}
+                {sp.label}
+              </span>
             </Button>
           ))}
         </div>

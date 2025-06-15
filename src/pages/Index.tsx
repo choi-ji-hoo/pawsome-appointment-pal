@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import BannerCarousel from "@/components/BannerCarousel";
@@ -17,7 +16,7 @@ const FUNNEL_LIST: FunnelCategory[] = [
   { label: "정형외과", iconKey: "ortho", value: "ortho" },
 ];
 
-// 진료(상품) 예시 데이터 (species 관련 항목 모두 삭제)
+// 진료(상품) 예시 데이터
 const TREATMENTS = [
   {
     id: 1,

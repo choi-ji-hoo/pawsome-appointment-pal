@@ -75,7 +75,31 @@ const Index = () => {
   return (
     <div className="bg-white min-h-screen max-w-md mx-auto flex flex-col relative pb-20">
       <header className="w-full px-4 pt-8 pb-2">
-        <div className="flex justify-center gap-3">
+        {/* 검색창을 최상단으로 이동 */}
+        <div className="relative">
+          <Input
+            placeholder="진료명, 항목명으로 검색"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-10"
+          />
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none">
+            <svg
+              width="18"
+              height="18"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              className="inline-block"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </span>
+        </div>
+        {/* 토글 버튼은 아래로 */}
+        <div className="flex justify-center gap-3 mt-4">
           {SPECIES.map((sp) => (
             <Button
               key={sp.label}
@@ -91,29 +115,6 @@ const Index = () => {
               {sp.label}
             </Button>
           ))}
-        </div>
-        <div className="mt-4">
-          <Input
-            placeholder="진료명, 항목명으로 검색"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="pl-10"
-            // 검색 아이콘: absolute로 배치(다음 div로 감쌈)
-          />
-          <span className="absolute left-7 top-[84px] text-gray-400 pointer-events-none">
-            <svg
-              width="18"
-              height="18"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              className="inline-block"
-            >
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-          </span>
         </div>
       </header>
       <main className="flex-1 w-full">
@@ -158,3 +159,4 @@ const Index = () => {
 };
 
 export default Index;
+

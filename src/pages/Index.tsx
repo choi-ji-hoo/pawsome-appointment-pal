@@ -3,6 +3,7 @@ import * as React from "react";
 import { Dog, Cat } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import TabsBar from "@/components/TabsBar";
 
 const SPECIES = [
@@ -63,8 +64,9 @@ const TREATMENTS = [
 
 const Index = () => {
   const [selectedSpecies, setSelectedSpecies] = React.useState("강아지");
+  // 검색어 상태, 추후 확장을 위해 준비 (현재는 UI만 동작)
+  const [search, setSearch] = React.useState("");
 
-  // 해당 동물종에 맞는 진료만 필터
   const filteredTreatments = React.useMemo(
     () => TREATMENTS.filter((t) => t.species === selectedSpecies),
     [selectedSpecies]
@@ -89,6 +91,29 @@ const Index = () => {
               {sp.label}
             </Button>
           ))}
+        </div>
+        <div className="mt-4">
+          <Input
+            placeholder="진료명, 항목명으로 검색"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-10"
+            // 검색 아이콘: absolute로 배치(다음 div로 감쌈)
+          />
+          <span className="absolute left-7 top-[84px] text-gray-400 pointer-events-none">
+            <svg
+              width="18"
+              height="18"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              className="inline-block"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </span>
         </div>
       </header>
       <main className="flex-1 w-full">
@@ -116,7 +141,6 @@ const Index = () => {
                     </div>
                     <div className="text-xs mt-1 text-blue-500 font-medium">
                       <span className="inline-flex items-center mr-1">
-                        {/* Lucide-React clock icon */}
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mr-0.5 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
                       </span>
                       {treat.hours}

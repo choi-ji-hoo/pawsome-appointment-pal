@@ -82,49 +82,14 @@ const HospitalDetail = () => {
       {/* 탭 컨텐츠 */}
       <div className="px-4 py-6">
         {activeTab === "info" && (
-          <div className="space-y-4">
-            <div className="text-gray-700 leading-relaxed">
-              {MOCK_HOSPITAL.description}
-            </div>
-            <div className="grid grid-cols-2 gap-2 mt-4">
-              {INFO_IMAGES.map((image, index) => (
-                <img
-                  key={index}
-                  src={image}
-                  alt={`병원 이미지 ${index + 1}`}
-                  className="w-full h-32 object-cover rounded-lg"
-                />
-              ))}
-            </div>
+          <div className="text-center text-gray-600 py-8">
+            후디 인스타에서 확인할 수 있습니다!
           </div>
         )}
         
         {activeTab === "treatment" && (
-          <div className="space-y-4">
-            {TREATMENTS.map((treatment) => (
-              <div
-                key={treatment.id}
-                className="border rounded-lg p-4 hover:bg-gray-50 cursor-pointer"
-                onClick={() => navigate(`/treatment/${treatment.id}`)}
-              >
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-lg mb-1">{treatment.name}</h3>
-                    <p className="text-xl font-bold text-gray-900">{treatment.price}</p>
-                    {treatment.description && (
-                      <p className="text-gray-600 text-sm mt-2">
-                        {treatment.description[0]}
-                      </p>
-                    )}
-                  </div>
-                  <img
-                    src="https://images.unsplash.com/photo-1582562124811-c09040d0a901?auto=format&fit=crop&w=80&h=80"
-                    alt={treatment.name}
-                    className="w-16 h-16 object-cover rounded-lg ml-4"
-                  />
-                </div>
-              </div>
-            ))}
+          <div className="text-center text-gray-600 py-8">
+            후디 인스타에서 확인할 수 있습니다!
           </div>
         )}
         

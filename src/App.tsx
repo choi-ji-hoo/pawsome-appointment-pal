@@ -10,15 +10,12 @@ import Status from "./pages/Status";
 import My from "./pages/My";
 import TreatmentDetail from "./pages/TreatmentDetail";
 import HospitalDetail from "./pages/HospitalDetail";
-import TabsBar from "@/components/TabsBar";
+// TabsBar import removed
 
 const queryClient = new QueryClient();
 
 const MainLayout = () => {
-  const location = useLocation();
-  // 탭바를 표시할 경로 목록
-  const showTabsBar = ["/", "/status", "/my"].includes(location.pathname);
-
+  // location and showTabsBar logic removed
   return (
     <div className="min-h-screen w-full bg-gray-50 flex flex-col">
       {/* Centered fixed-width layout for content */}
@@ -34,8 +31,7 @@ const MainLayout = () => {
           </Routes>
         </div>
       </div>
-      {/* 상단 가로 TabsBar로 위치/스타일 변경 */}
-      {showTabsBar && <TabsBar />}
+      {/* TabsBar removed */}
     </div>
   );
 };

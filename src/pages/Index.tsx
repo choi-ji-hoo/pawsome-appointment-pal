@@ -1,9 +1,10 @@
+
 import * as React from "react";
 import { Dog, Cat } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import TabsBar from "@/components/TabsBar";
+// TabsBar import removed
 import { useNavigate } from "react-router-dom";
 
 const SPECIES = [
@@ -154,7 +155,7 @@ const Index = () => {
           </ul>
         </section>
       </main>
-      <TabsBar />
+      {/* TabsBar removed from Index */}
     </div>
   );
 };

@@ -71,17 +71,30 @@ const TREATMENTS = [
 ];
 
 const TopBanner = () => (
-  <div className="w-full">
+  <div className="w-full relative mb-4">
     <img
-      src="/lovable-uploads/69307ae2-672a-4189-8c4e-2ffc2386b09f.png"
+      src="/lovable-uploads/9e1f8f70-10c2-4eb3-a828-03528678a33b.png"
       alt="Top Banner"
-      className="w-full h-28 max-h-32 object-cover object-top"
+      className="w-full h-[196px] object-cover object-center rounded-b-3xl shadow-sm"
       draggable={false}
       style={{
-        borderBottomLeftRadius: "1.2rem",
-        borderBottomRightRadius: "1.2rem"
+        borderBottomLeftRadius: "1.6rem",
+        borderBottomRightRadius: "1.6rem"
       }}
     />
+    <div className="absolute left-0 right-0 top-0 h-[84px] flex justify-center items-center pointer-events-none">
+      <span className="font-extrabold text-3xl tracking-wider text-black font-[Pretendard] drop-shadow bg-white/90 px-8 py-1 rounded-b-xl select-none">hoodi</span>
+    </div>
+    {/* 텍스트와 뱃지 */}
+    <div className="absolute left-6 bottom-7 z-10">
+      <div className="flex items-center space-x-2">
+        <span className="bg-red-400 text-white text-xs rounded-full px-2.5 py-0.5 font-bold mr-2 shadow" style={{letterSpacing: "-1px"}}>최대 12%</span>
+      </div>
+      <div className="text-white text-xl font-extrabold mt-2 drop-shadow" style={{lineHeight: "1.2"}}>우리집 반려동물<br/>간식 기획전</div>
+      <div className="text-white text-xs mt-1 opacity-90">최대 12% 할인</div>
+    </div>
+    {/* 페이지 인디케이터 예시 */}
+    <div className="absolute right-4 bottom-3 text-xs text-white/95 bg-black/40 rounded-full px-3 py-1 font-bold">{`01/35`}</div>
   </div>
 );
 

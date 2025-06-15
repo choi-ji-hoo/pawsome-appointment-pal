@@ -4,7 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Star, ArrowLeft } from "lucide-react";
 
-// 병원/진료/리뷰 Mock 데이터 (이미 사용된 코드 동일)
+// Mock 데이터 동일
 const MOCK_HOSPITAL = {
   name: "후디 동물병원",
   location: "울산 남구",
@@ -23,7 +23,7 @@ const TREATMENTS = [
     ],
     infoTab: [
       "진료 예약은 사전 전화 문의 바랍니다.",
-      "검진 전 8시간 금식이 필요합니다."
+      "검진 전 8시간 금식이 필요합니다.",
     ],
     reviews: [
       {
@@ -39,13 +39,24 @@ const TREATMENTS = [
     ],
   },
   // ...추가 진료 mock
+  {
+    id: 2,
+    name: "고양이 건강검진",
+    price: "350,000원",
+    description: [
+      "고양이 전용 건강검진입니다.",
+    ],
+    infoTab: [
+      "진료 예약은 사전 전화 문의 바랍니다.",
+    ],
+    reviews: [],
+  },
 ];
 const TABS = [
   { label: "진료 정보", value: "info" },
   { label: "후기", value: "review" },
 ];
-
-// 진료 관련 예시 이미지 (Unsplash)
+// 진료 이미지 (하단에 상세 이미지로 노출)
 const INFO_IMAGES = [
   "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=400&q=80",
   "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=400&q=80",
@@ -74,7 +85,7 @@ const TreatmentDetail = () => {
           <ArrowLeft size={22} />
         </button>
       </div>
-      {/* 병원/썸네일 */}
+      {/* 썸네일 (상단 배경) */}
       <div className="px-4">
         <div className="relative overflow-hidden rounded-xl mb-3">
           <img
@@ -82,20 +93,6 @@ const TreatmentDetail = () => {
             alt={MOCK_HOSPITAL.name}
             className="w-full h-[156px] object-cover"
           />
-          {/* 병원 정보 카드 */}
-          <div className="absolute left-3 bottom-3 bg-white/80 backdrop-blur px-4 py-2 rounded-lg flex gap-3 items-center shadow-md">
-            <span className="rounded-full overflow-hidden w-8 h-8 border">
-              <img
-                src={MOCK_HOSPITAL.thumbnail}
-                alt={MOCK_HOSPITAL.name}
-                className="object-cover w-8 h-8"
-              />
-            </span>
-            <div>
-              <div className="text-sm font-semibold">{MOCK_HOSPITAL.name}</div>
-              <div className="text-xs text-gray-500">{MOCK_HOSPITAL.location}</div>
-            </div>
-          </div>
         </div>
       </div>
       {/* 메인 내용 */}
@@ -127,20 +124,39 @@ const TreatmentDetail = () => {
         {/* 진료 정보 탭 */}
         {tab === "info" && (
           <div className="w-full">
-            {/* 예시 안내문구 (상단) */}
-            <div className="text-sm font-medium mb-2 mt-1">
-              진료 사진/이미지
-            </div>
-            {/* 이미지 가로 스크롤 */}
-            <div className="flex gap-3 overflow-x-auto pb-2 hide-scrollbar">
+            {/* 세로 스크롤될 진료 이미지 영역 */}
+            <div className="max-h-[400px] overflow-y-auto flex flex-col gap-3 py-2 hide-scrollbar">
+              {/* 진료 상세 이미지 영역 (여러 이미지 등록 가능) */}
               {INFO_IMAGES.map((url, idx) => (
                 <img
                   key={idx}
                   src={url}
                   alt={`진료 이미지 ${idx + 1}`}
-                  className="rounded-xl h-40 min-w-[180px] object-cover border"
+                  className="rounded-xl w-full max-h-72 object-cover border"
                 />
               ))}
+              {/*--- 병원 카드 위치(이미지/텍스트 사이) ---*/}
+              <div className="sticky top-0 left-0 z-10 bg-white/90 backdrop-blur rounded-lg shadow-md px-4 py-2 flex gap-3 items-center border mx-1 mt-1 mb-4">
+                <span className="rounded-full overflow-hidden w-9 h-9 border">
+                  <img
+                    src={MOCK_HOSPITAL.thumbnail}
+                    alt={MOCK_HOSPITAL.name}
+                    className="object-cover w-9 h-9"
+                  />
+                </span>
+                <div>
+                  <div className="text-sm font-semibold">{MOCK_HOSPITAL.name}</div>
+                  <div className="text-xs text-gray-500">{MOCK_HOSPITAL.location}</div>
+                </div>
+              </div>
+              {/* 진료명 */}
+              <div className="font-semibold text-lg mt-2 mb-1">{treatment.name}</div>
+              {/* 진료 설명 */}
+              <ul className="list-disc list-inside text-gray-700 text-sm mb-2 px-1">
+                {treatment.description.map((desc, idx) => (
+                  <li key={idx}>{desc}</li>
+                ))}
+              </ul>
             </div>
           </div>
         )}
@@ -179,3 +195,4 @@ const TreatmentDetail = () => {
 };
 
 export default TreatmentDetail;
+

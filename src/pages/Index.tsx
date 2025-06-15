@@ -8,15 +8,15 @@ import BannerCarousel from "@/components/BannerCarousel";
 
 // 카테고리 Funnel 정보
 const FUNNELS = [
-  { label: "병원 예약", icon: <Calendar size={22} className="text-blue-400" />, value: "hospital" },
-  { label: "예방의학", icon: <Syringe size={22} className="text-green-500" />, value: "prevent" },
-  { label: "치의학", icon: <HeartPulse size={22} className="text-yellow-600" />, value: "den" },
-  { label: "정형외과", icon: <Bone size={22} className="text-rose-500" />, value: "ortho" },
+  { label: "병원 예약", icon: <Calendar size={22} />, value: "hospital" },
+  { label: "예방의학", icon: <Syringe size={22} />, value: "prevent" },
+  { label: "치의학", icon: <HeartPulse size={22} />, value: "den" },
+  { label: "정형외과", icon: <Bone size={22} />, value: "ortho" },
 ];
 
 const SPECIES = [
-  { label: "강아지", icon: <Dog size={20} className="text-blue-400 mr-1" /> },
-  { label: "고양이", icon: <Cat size={20} className="text-amber-400 mr-1" /> },
+  { label: "강아지", icon: <Dog size={20} />, value: "dog" },
+  { label: "고양이", icon: <Cat size={20} />, value: "cat" },
 ];
 
 const TREATMENTS = [
@@ -70,27 +70,94 @@ const TREATMENTS = [
   },
 ];
 
-const FunnnelSection = () => (
-  <div className="grid grid-cols-4 gap-2 mt-3 px-2">
-    {FUNNELS.map((fun) => (
-      <Button
-        key={fun.value}
-        type="button"
-        variant="outline"
-        className="flex flex-col items-center justify-center py-3 px-0 bg-white rounded-xl border border-gray-100 shadow-sm hover:bg-blue-50 transition-all"
-        onClick={() => {}}
-        style={{ minWidth: 0 }}
-      >
-        <div className="mb-1">{fun.icon}</div>
-        <span className="text-xs text-gray-800 font-semibold whitespace-nowrap">{fun.label}</span>
-      </Button>
-    ))}
-  </div>
-);
+// 종 토글 (pill 스타일)
+function SpeciesToggle({ selectedSpecies, setSelectedSpecies }: { selectedSpecies: string; setSelectedSpecies: (v: string) => void }) {
+  return (
+    <div className="flex justify-center gap-3 mt-2 w-full">
+      {SPECIES.map((sp) => {
+        const isActive = selectedSpecies === sp.label;
+        return (
+          <Button
+            key={sp.label}
+            type="button"
+            variant="outline"
+            className={cn(
+              "flex items-center gap-2 rounded-full px-6 py-2 border font-bold min-w-[110px] text-base transition-colors group",
+              isActive
+                ? "bg-blue-50 border-blue-500 text-blue-700"
+                : "bg-white border-gray-200 text-gray-400 hover:border-blue-200"
+            )}
+            style={{
+              boxShadow: isActive ? "0px 4px 16px rgba(58,133,242,0.08)" : undefined,
+            }}
+            onClick={() => setSelectedSpecies(sp.label)}
+          >
+            <span
+              className={
+                isActive
+                  ? "text-blue-600"
+                  : "text-gray-300 group-hover:text-blue-300"
+              }
+            >
+              {sp.icon}
+            </span>
+            {sp.label}
+          </Button>
+        );
+      })}
+    </div>
+  );
+}
+
+// 카테고리 선택 카드형 영역
+function CategorySection({ selectedCategory, setSelectedCategory }: { selectedCategory: string; setSelectedCategory: (v: string) => void }) {
+  return (
+    <div className="w-full mt-5 mb-1 px-2">
+      <div className="bg-white rounded-2xl border border-gray-100 flex flex-row items-center justify-between py-2 px-0">
+        {FUNNELS.map((fun, idx) => {
+          const isActive = selectedCategory === fun.value;
+          return (
+            <button
+              key={fun.value}
+              type="button"
+              onClick={() => setSelectedCategory(fun.value)}
+              className={cn(
+                "flex-1 flex flex-col items-center gap-1 py-3 transition-all relative group rounded-xl focus:outline-none",
+                isActive ? "" : "hover:bg-blue-50"
+              )}
+              style={{ minWidth: 0 }}
+            >
+              <span
+                className={cn(
+                  "mb-1",
+                  isActive ? "text-blue-500" : "text-gray-300"
+                )}
+              >
+                {React.cloneElement(fun.icon, { size: 24, className: "mx-auto" })}
+              </span>
+              <span
+                className={cn(
+                  "text-xs font-semibold",
+                  isActive ? "text-blue-600" : "text-gray-400 group-hover:text-blue-400"
+                )}
+              >
+                {fun.label}
+              </span>
+              {isActive && (
+                <span className="absolute left-2 right-2 -bottom-1 h-1 rounded-full bg-blue-500" />
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 const Index = () => {
   const [selectedSpecies, setSelectedSpecies] = React.useState("강아지");
   const [search, setSearch] = React.useState("");
+  const [selectedCategory, setSelectedCategory] = React.useState(FUNNELS[0].value);
   const navigate = useNavigate();
 
   const filteredTreatments = React.useMemo(
@@ -127,29 +194,10 @@ const Index = () => {
         <div className="mt-0">
           <BannerCarousel />
         </div>
-        <FunnnelSection />
-        <div className="flex justify-center gap-3 mt-3">
-          {SPECIES.map((sp) => (
-            <Button
-              key={sp.label}
-              type="button"
-              variant={selectedSpecies === sp.label ? "default" : "outline"}
-              className={cn(
-                "flex-1 min-w-0 flex items-center justify-center gap-1 font-bold transition-all px-4 py-2 text-base rounded-full border-2 font-sans",
-                selectedSpecies === sp.label
-                  ? "ring-2 ring-blue-400 bg-blue-50 border-blue-200 text-blue-700"
-                  : "border-gray-200 bg-white hover:bg-gray-50 text-gray-500"
-              )}
-              onClick={() => setSelectedSpecies(sp.label)}
-              style={{ flex: 1 }}
-            >
-              <span className="flex items-center gap-1 w-full justify-center">
-                {sp.icon}
-                {sp.label}
-              </span>
-            </Button>
-          ))}
-        </div>
+        {/* 종(강아지/고양이) pill 토글 */}
+        <SpeciesToggle selectedSpecies={selectedSpecies} setSelectedSpecies={setSelectedSpecies} />
+        {/* 카테고리 카드 메뉴 */}
+        <CategorySection selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
       </header>
       <main className="flex-1 w-full">
         <section className="mt-6 px-3 mb-28">

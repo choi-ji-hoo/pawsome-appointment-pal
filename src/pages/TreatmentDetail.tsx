@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -146,7 +145,7 @@ const TreatmentDetail = () => {
         {tab === "info" && (
           <div className="w-full">
             {/* 진료 상세 이미지 - 세로 스크롤 가능 */}
-            <div className="max-h-[400px] overflow-y-auto flex flex-col gap-4 pt-4 pb-8 hide-scrollbar">
+            <div className="max-h-[400px] overflow-y-auto flex flex-col pt-4 pb-8 hide-scrollbar space-y-0">
               {INFO_IMAGES.map((url, idx) => (
                 <img
                   key={idx}

@@ -1,11 +1,17 @@
-
 import * as React from "react";
-import { Dog, Cat } from "lucide-react";
+import { Dog, Cat, Calendar, Syringe, Tooth, Bone } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-// TabsBar import removed
 import { useNavigate } from "react-router-dom";
+
+// 카테고리 Funnel 정보
+const FUNNELS = [
+  { label: "병원 예약", icon: <Calendar size={22} className="text-blue-400" />, value: "hospital" },
+  { label: "예방의학", icon: <Syringe size={22} className="text-green-500" />, value: "prevent" },
+  { label: "치의학", icon: <Tooth size={22} className="text-yellow-600" />, value: "den" },
+  { label: "정형외과", icon: <Bone size={22} className="text-rose-500" />, value: "ortho" },
+];
 
 const SPECIES = [
   { label: "강아지", icon: <Dog size={20} className="text-blue-400 mr-1" /> },
@@ -63,6 +69,46 @@ const TREATMENTS = [
   },
 ];
 
+const Banner = () => (
+  <div className="relative w-full h-40 mt-5 rounded-2xl overflow-hidden shadow-sm animate-fade-in">
+    <img
+      src="/lovable-uploads/e954edd0-5224-4456-b97e-6955b372e775.png"
+      alt="베너"
+      className="w-full h-full object-cover"
+      draggable={false}
+    />
+    {/* 할인 뱃지 및 텍스트 오버레이 */}
+    <div className="absolute top-4 left-4 text-left z-10">
+      <div className="inline-block bg-[#ff6633] text-white rounded-full px-3 py-1 text-xs font-bold shadow">최대 12%</div>
+      <div className="mt-2 text-white text-lg font-extrabold drop-shadow tracking-tight">
+        우리집 반려동물<br />간식 기획전
+      </div>
+      <div className="mt-1 text-sm text-white/80">최대 12% 할인</div>
+    </div>
+    {/* 페이지 넘버 표시 */}
+    <div className="absolute right-4 bottom-4 rounded-full bg-black/40 text-white px-3 py-1 text-xs font-bold">01/35</div>
+    {/* 어두운 배경 오버레이 */}
+    <div className="absolute inset-0 bg-gradient-to-t from-black/35 to-transparent" />
+  </div>
+);
+
+const FunnnelSection = () => (
+  <div className="flex justify-between gap-2 mt-5 mb-2 px-1">
+    {FUNNELS.map((fun) => (
+      <Button
+        key={fun.value}
+        type="button"
+        variant="outline"
+        className="flex-1 flex flex-col items-center py-4 bg-white rounded-xl shadow group hover:bg-blue-50 transition-all border border-gray-100"
+        onClick={() => {}} // TODO: 연결된 기능이 있다면 여기서 처리
+      >
+        <div className="mb-1 group-hover:scale-110 transition-transform">{fun.icon}</div>
+        <span className="text-xs text-gray-700 font-semibold">{fun.label}</span>
+      </Button>
+    ))}
+  </div>
+);
+
 const Index = () => {
   const [selectedSpecies, setSelectedSpecies] = React.useState("강아지");
   const [search, setSearch] = React.useState("");
@@ -74,9 +120,9 @@ const Index = () => {
   );
 
   return (
-    <div className="bg-white min-h-screen max-w-md mx-auto flex flex-col relative pb-20">
+    <div className="bg-white min-h-screen max-w-2xl mx-auto flex flex-col relative pb-20">
       <header className="w-full px-4 pt-8 pb-2">
-        {/* 검색창을 최상단으로 이동 */}
+        {/* 검색창 */}
         <div className="relative">
           <Input
             placeholder="진료명, 항목명으로 검색"
@@ -99,7 +145,11 @@ const Index = () => {
             </svg>
           </span>
         </div>
-        {/* 토글 버튼은 아래로 */}
+        {/* 베너 */}
+        <Banner />
+        {/* 퍼널 카테고리 */}
+        <FunnnelSection />
+        {/* 강아지/고양이 토글 */}
         <div className="flex justify-center gap-3 mt-4">
           {SPECIES.map((sp) => (
             <Button
@@ -124,38 +174,43 @@ const Index = () => {
             {filteredTreatments.length === 0 ? (
               <li className="text-center text-gray-400 py-8 text-base">해당 동물의 진료가 없습니다.</li>
             ) : (
-              filteredTreatments.map((treat) => (
-                <li
-                  key={treat.id}
-                  className="flex bg-white rounded-xl shadow-md items-center gap-4 p-3 border hover:scale-[1.01] transition cursor-pointer"
-                  onClick={() => navigate(`/treatment/${treat.id}`)}
-                >
-                  <div className="flex-shrink-0">
-                    <img
-                      src={treat.thumbnail}
-                      alt={treat.name}
-                      className="w-16 h-16 rounded-lg object-cover border border-blue-100 bg-gray-50"
-                    />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-bold text-blue-700 truncate">{treat.name}</div>
-                    <div className="text-xs mt-1 text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis">
-                      {treat.items.join(" · ")}
+              filteredTreatments
+                .filter(
+                  (treat) =>
+                    treat.name.includes(search) ||
+                    treat.items.some((item) => item.includes(search))
+                )
+                .map((treat) => (
+                  <li
+                    key={treat.id}
+                    className="flex bg-white rounded-xl shadow-md items-center gap-4 p-3 border hover:scale-[1.01] transition cursor-pointer"
+                    onClick={() => navigate(`/treatment/${treat.id}`)}
+                  >
+                    <div className="flex-shrink-0">
+                      <img
+                        src={treat.thumbnail}
+                        alt={treat.name}
+                        className="w-16 h-16 rounded-lg object-cover border border-blue-100 bg-gray-50"
+                      />
                     </div>
-                    <div className="text-xs mt-1 text-blue-500 font-medium">
-                      <span className="inline-flex items-center mr-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mr-0.5 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-                      </span>
-                      {treat.hours}
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold text-blue-700 truncate">{treat.name}</div>
+                      <div className="text-xs mt-1 text-gray-500 whitespace-nowrap overflow-hidden text-ellipsis">
+                        {treat.items.join(" · ")}
+                      </div>
+                      <div className="text-xs mt-1 text-blue-500 font-medium">
+                        <span className="inline-flex items-center mr-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 inline-block mr-0.5 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+                        </span>
+                        {treat.hours}
+                      </div>
                     </div>
-                  </div>
-                </li>
-              ))
+                  </li>
+                ))
             )}
           </ul>
         </section>
       </main>
-      {/* TabsBar removed from Index */}
     </div>
   );
 };

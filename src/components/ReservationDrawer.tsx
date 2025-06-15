@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerFooter, DrawerClose } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
@@ -90,7 +89,7 @@ const ReservationDrawer: React.FC<ReservationDrawerProps> = ({
                     (step === i + 1
                       ? "bg-gray-900 text-white border-gray-900 scale-110 shadow"
                       : step > i + 1
-                      ? "bg-green-500 text-white border-green-500"
+                      ? "bg-blue-500 text-white border-blue-500"
                       : "bg-gray-100 text-gray-400 border-gray-200")
                   }
                   style={{ fontSize: 14, transition: "all 0.2s" }}
@@ -112,7 +111,7 @@ const ReservationDrawer: React.FC<ReservationDrawerProps> = ({
                     className={
                       "absolute left-full top-1/2 w-full h-1 -translate-y-1/2 " +
                       (step > i + 1
-                        ? "bg-green-500"
+                        ? "bg-blue-500"
                         : "bg-gray-200")
                     }
                     style={{ zIndex: 0, height: 2, width: "28px" }}
@@ -149,7 +148,7 @@ const ReservationDrawer: React.FC<ReservationDrawerProps> = ({
                       <RadioGroupItem value={op} id={op} />
                       <span>{op}</span>
                       {option === op && (
-                        <span className="ml-auto text-green-600 text-xs font-bold">
+                        <span className="ml-auto text-blue-600 text-xs font-bold">
                           선택됨
                         </span>
                       )}
@@ -184,14 +183,14 @@ const ReservationDrawer: React.FC<ReservationDrawerProps> = ({
                   ref={timeSectionRef}
                   className={`mt-0 px-5 py-5 transition-all duration-300 ${
                     date
-                      ? "bg-green-50 ring-2 ring-green-200"
+                      ? "bg-blue-50 ring-2 ring-blue-200"
                       : "bg-white"
                   } rounded-b-2xl`}
                   style={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}
                 >
                   <div className="flex flex-col items-center">
                     <div className={`font-semibold text-base mb-1 text-gray-800 transition-colors ${
-                      date ? "text-green-700" : ""
+                      date ? "text-blue-700" : ""
                     }`}>
                       시간 선택
                     </div>
@@ -285,9 +284,9 @@ const ReservationDrawer: React.FC<ReservationDrawerProps> = ({
             )}
             {/* Step 4: 신청 완료 */}
             {step === 4 && (
-              <section className="flex flex-col items-center justify-center h-64 gap-6 bg-gradient-to-b from-green-50 to-white rounded-2xl my-6">
+              <section className="flex flex-col items-center justify-center h-64 gap-6 bg-gradient-to-b from-blue-50 to-white rounded-2xl my-6">
                 <div className="text-5xl">🎉</div>
-                <div className="font-bold text-2xl text-green-700">예약이 완료되었습니다!</div>
+                <div className="font-bold text-2xl text-blue-700">예약이 완료되었습니다!</div>
                 <div className="text-gray-500 text-base text-center">
                   예약 내역은 <span className="font-semibold text-blue-700">예약현황</span>에서 확인할 수 있습니다.
                 </div>

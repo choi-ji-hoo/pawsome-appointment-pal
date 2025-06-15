@@ -83,6 +83,10 @@ const TreatmentDetail = () => {
   const [tab, setTab] = React.useState<"info" | "review">("info");
   const treatment = TREATMENTS.find(t => t.id === Number(id)) || TREATMENTS[0];
 
+  // 예약 단계: 현재 몇 번째인지 보이게
+  const stepLabels = ["옵션", "날짜·시간", "보호자정보", "완료"];
+  const isMobile = true; // 향후 hook으로 분리 가능
+
   // 예약 Drawer 관련 상태
   const [drawerOpen, setDrawerOpen] = React.useState(false);
   const [step, setStep] = React.useState(1);
@@ -321,38 +325,91 @@ const TreatmentDetail = () => {
             onSubmit={handleNextStep}
             className="w-full max-w-md mx-auto min-h-[calc(100dvh*0.72)] h-[70dvh] flex flex-col bg-white"
           >
-            <DrawerHeader className="pb-2 pt-5 px-0">
-              <DrawerTitle className="text-lg font-bold">
-                {step === 1 && "옵션 선택"}
-                {step === 2 && "날짜·시간 선택"}
-                {step === 3 && "보호자 정보 입력"}
-                {step === 4 && "예약 완료"}
+            {/* Step Indicator (상단) */}
+            <div className="flex items-center justify-center pt-5 pb-2 gap-2">
+              {stepLabels.map((label, i) => (
+                <div key={i} className="flex flex-col items-center flex-1 relative">
+                  <div
+                    className={
+                      "w-6 h-6 flex items-center justify-center rounded-full font-semibold border-2 " +
+                      (step === i + 1
+                        ? "bg-gray-900 text-white border-gray-900 scale-110 shadow"
+                        : step > i + 1
+                        ? "bg-green-500 text-white border-green-500"
+                        : "bg-gray-100 text-gray-400 border-gray-200")
+                    }
+                    style={{ fontSize: 14, transition: "all 0.2s" }}
+                  >
+                    {i + 1}
+                  </div>
+                  <span
+                    className={
+                      "text-xs mt-1 " +
+                      (step === i + 1
+                        ? "text-gray-900 font-bold"
+                        : "text-gray-400")
+                    }
+                  >
+                    {label}
+                  </span>
+                  {i < stepLabels.length - 1 && (
+                    <div
+                      className={
+                        "absolute left-full top-1/2 w-full h-1 -translate-y-1/2 " +
+                        (step > i + 1
+                          ? "bg-green-500"
+                          : "bg-gray-200")
+                      }
+                      style={{ zIndex: 0, height: 2, width: "28px" }}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+            {/* Drawer Header */}
+            <DrawerHeader className="pb-1 pt-0 px-0">
+              <DrawerTitle className="text-base font-bold text-center">
+                {stepLabels[step - 1]}
               </DrawerTitle>
             </DrawerHeader>
-            <div className="flex-1 px-4 py-2 overflow-auto">
+            <div className="flex-1 px-2 sm:px-4 py-2 overflow-auto">
               {/* Step 1: 옵션 선택 */}
               {step === 1 && (
-                <div className="flex flex-col gap-1 mt-1">
+                <section className="bg-gray-50 px-4 py-5 rounded-2xl shadow border mb-1">
+                  <div className="font-semibold text-base mb-2 text-gray-800">검진 유형</div>
                   <RadioGroup
                     value={option ?? undefined}
                     onValueChange={setOption}
                     className="flex flex-col gap-2"
                   >
                     {OPTIONS.map(op => (
-                      <label key={op} className="flex items-center py-2 gap-3 text-base border rounded-lg px-4 cursor-pointer transition hover:bg-gray-100">
+                      <label
+                        key={op}
+                        className={
+                          "flex items-center gap-3 text-base px-4 py-3 border rounded-xl cursor-pointer transition-all font-medium " +
+                          (option === op
+                            ? "border-gray-900 bg-white shadow"
+                            : "border-gray-200 bg-gray-50 hover:border-gray-400 hover:bg-gray-100")
+                        }
+                      >
                         <RadioGroupItem value={op} id={op} />
                         <span>{op}</span>
+                        {option === op && (
+                          <span className="ml-auto text-green-600 text-xs font-bold">
+                            선택됨
+                          </span>
+                        )}
                       </label>
                     ))}
                   </RadioGroup>
-                </div>
+                </section>
               )}
               {/* Step 2: 날짜/시간 선택 */}
               {step === 2 && (
-                <div className="space-y-4">
+                <section className="bg-gray-50 px-4 py-5 rounded-2xl shadow border mb-2 flex flex-col gap-6">
                   <div>
-                    <div className="font-semibold text-base mb-2">원하는 날짜</div>
-                    <div className="bg-[#F8FAFC] p-2 rounded-xl flex justify-center">
+                    <div className="font-semibold text-base mb-2 text-gray-800">원하는 날짜</div>
+                    <div className="bg-white p-2 rounded-xl border">
                       <Calendar
                         mode="single"
                         selected={date}
@@ -363,18 +420,19 @@ const TreatmentDetail = () => {
                     </div>
                   </div>
                   <div>
-                    <div className="font-semibold text-base mb-2">시간 선택</div>
-                    <div className="flex flex-wrap gap-2">
+                    <div className="font-semibold text-base mb-2 text-gray-800">시간 선택</div>
+                    <div className="flex flex-wrap gap-2 justify-center">
                       {TIMES.map((t) => (
                         <Button
                           key={t}
                           type="button"
                           size="sm"
-                          className={`rounded-lg px-3 font-semibold min-w-[72px] ${
-                            time === t
-                              ? "bg-gray-900 text-white"
-                              : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                          }`}
+                          className={
+                            "rounded-lg px-3 font-semibold min-w-[72px] border " +
+                            (time === t
+                              ? "bg-gray-900 text-white border-gray-900 shadow"
+                              : "bg-gray-100 text-gray-700 border-gray-200 hover:bg-gray-200 hover:border-gray-400")
+                          }
                           onClick={() => setTime(t)}
                         >
                           {t}
@@ -382,72 +440,82 @@ const TreatmentDetail = () => {
                       ))}
                     </div>
                   </div>
-                </div>
+                </section>
               )}
               {/* Step 3: 보호자 정보 입력 */}
               {step === 3 && (
-                <div className="space-y-5 pt-0">
-                  <div>
-                    <label className="text-sm font-semibold block mb-1">보호자 이름</label>
-                    <Input value={guardianName}
-                      onChange={e => setGuardianName(e.target.value)}
-                      required minLength={2} maxLength={10}
-                      placeholder="성함 입력"
-                      className="rounded-lg py-3 px-4 text-base"
-                    />
+                <section className="bg-gray-50 px-4 py-5 rounded-2xl shadow border mb-2">
+                  <div className="font-semibold text-base mb-4 text-gray-800">보호자 정보 입력</div>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-sm font-semibold block mb-1 text-gray-700">보호자 이름</label>
+                      <Input value={guardianName}
+                        onChange={e => setGuardianName(e.target.value)}
+                        required minLength={2} maxLength={10}
+                        placeholder="성함 입력"
+                        className="rounded-lg py-3 px-4 text-base border-gray-200 focus:ring-2 focus:ring-gray-900"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-semibold block mb-1 text-gray-700">보호자 전화번호</label>
+                      <Input type="tel" inputMode="tel"
+                        placeholder="010-0000-0000"
+                        value={guardianPhone}
+                        onChange={e => setGuardianPhone(e.target.value)}
+                        required
+                        pattern="^01[0-9]-\d{3,4}-\d{4}$"
+                        className="rounded-lg py-3 px-4 text-base border-gray-200 focus:ring-2 focus:ring-gray-900"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-semibold block mb-1 text-gray-700">반려동물 이름</label>
+                      <Input value={petName}
+                        onChange={e => setPetName(e.target.value)}
+                        required minLength={1} maxLength={12}
+                        placeholder="예) 초코"
+                        className="rounded-lg py-3 px-4 text-base border-gray-200 focus:ring-2 focus:ring-gray-900"
+                      />
+                    </div>
+                    <div>
+                      <label className="text-sm font-semibold block mb-1 text-gray-700">반려동물 몸무게 (kg)</label>
+                      <Input
+                        type="number"
+                        inputMode="decimal"
+                        min="0"
+                        step="0.1"
+                        value={petWeight}
+                        onChange={e => setPetWeight(e.target.value)}
+                        required
+                        placeholder="예) 6.8"
+                        className="rounded-lg py-3 px-4 text-base border-gray-200 focus:ring-2 focus:ring-gray-900"
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="text-sm font-semibold block mb-1">보호자 전화번호</label>
-                    <Input type="tel" inputMode="tel"
-                      placeholder="010-0000-0000"
-                      value={guardianPhone}
-                      onChange={e => setGuardianPhone(e.target.value)}
-                      required
-                      pattern="^01[0-9]-\d{3,4}-\d{4}$"
-                      className="rounded-lg py-3 px-4 text-base"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm font-semibold block mb-1">반려동물 이름</label>
-                    <Input value={petName}
-                      onChange={e => setPetName(e.target.value)}
-                      required minLength={1} maxLength={12}
-                      placeholder="예) 초코"
-                      className="rounded-lg py-3 px-4 text-base"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-sm font-semibold block mb-1">반려동물 몸무게(kg)</label>
-                    <Input
-                      type="number"
-                      inputMode="decimal"
-                      min="0"
-                      step="0.1"
-                      value={petWeight}
-                      onChange={e => setPetWeight(e.target.value)}
-                      required
-                      placeholder="예) 6.8"
-                      className="rounded-lg py-3 px-4 text-base"
-                    />
-                  </div>
-                </div>
+                </section>
               )}
               {/* Step 4: 신청 완료 */}
               {step === 4 && (
-                <div className="flex flex-col items-center justify-center h-60 gap-5">
-                  <div className="text-3xl">🎉</div>
-                  <div className="font-bold text-lg text-center">예약이 완료되었습니다!</div>
-                  <div className="text-gray-500 text-center text-base">
+                <section className="flex flex-col items-center justify-center h-64 gap-6 bg-gradient-to-b from-green-50 to-white rounded-2xl my-6">
+                  <div className="text-5xl">🎉</div>
+                  <div className="font-bold text-2xl text-green-700">예약이 완료되었습니다!</div>
+                  <div className="text-gray-500 text-base text-center">
                     예약 내역은 <span className="font-semibold text-blue-700">예약현황</span>에서 확인할 수 있습니다.
                   </div>
-                </div>
+                  <div>
+                    <Button size="lg" className="rounded-xl bg-gray-900 text-white px-10"
+                      type="button" onClick={handleToStatus}>
+                      예약현황 바로가기
+                    </Button>
+                  </div>
+                </section>
               )}
             </div>
-            <DrawerFooter className="!mt-auto !pb-5 gap-2 px-4">
+            {/* 하단 버튼영역 */}
+            <DrawerFooter className="!mt-auto !pb-5 !pt-0 gap-2 px-4 bg-white">
               {step !== 4 && (
                 <Button
                   type="submit"
-                  className="w-full h-12 font-bold rounded-xl text-base"
+                  className="w-full h-12 font-bold rounded-xl text-base bg-gray-900 text-white hover:bg-gray-700"
                   disabled={
                     (step === 1 && !option) ||
                     (step === 2 && (!date || !time)) ||
@@ -465,25 +533,26 @@ const TreatmentDetail = () => {
                   다음
                 </Button>
               )}
-              {step === 4 ? (
-                <Button className="w-full h-12 font-bold rounded-xl text-base" type="button" onClick={handleToStatus}>
-                  예약현황으로 이동
+              {step !== 1 && step !== 4 && (
+                <Button
+                  variant="outline"
+                  type="button"
+                  className="w-full h-12 rounded-xl text-base border-gray-300"
+                  onClick={() => setStep(step - 1)}
+                >
+                  이전
                 </Button>
-              ) : (
-                step > 1 && (
-                  <Button
-                    variant="outline"
-                    type="button"
-                    className="w-full h-12 rounded-xl text-base"
-                    onClick={() => setStep(step - 1)}
-                  >
-                    이전
-                  </Button>
-                )
               )}
-              <DrawerClose asChild>
-                <Button variant="ghost" type="button" className="w-full h-12 rounded-xl text-base">닫기</Button>
-              </DrawerClose>
+              {step === 4 && (
+                <Button variant="ghost" type="button" className="w-full h-12 rounded-xl text-base text-gray-500" onClick={() => setDrawerOpen(false)}>
+                  닫기
+                </Button>
+              )}
+              {step !== 4 && (
+                <DrawerClose asChild>
+                  <Button variant="ghost" type="button" className="w-full h-12 rounded-xl text-base text-gray-500">취소</Button>
+                </DrawerClose>
+              )}
             </DrawerFooter>
           </form>
         </DrawerContent>

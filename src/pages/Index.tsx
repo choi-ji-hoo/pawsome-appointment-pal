@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BannerCarousel from "@/components/BannerCarousel";
 import CategoryFunnelToggle from "@/components/CategoryFunnelToggle";
@@ -11,6 +11,19 @@ import { TREATMENTS } from "@/utils/constants";
 const Index = () => {
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  
+  // Add state for category and species selection
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedSpecies, setSelectedSpecies] = useState("강아지");
+
+  // Define funnel categories
+  const funnelList = [
+    { label: "전체", value: "all", iconKey: "all" as const },
+    { label: "진료과목", value: "hospital", iconKey: "hospital" as const },
+    { label: "예방접종", value: "prevent", iconKey: "prevent" as const },
+    { label: "치과", value: "den", iconKey: "den" as const },
+    { label: "정형외과", value: "ortho", iconKey: "ortho" as const },
+  ];
 
   return (
     <div className="min-h-screen max-w-md w-full mx-auto bg-white">
@@ -36,8 +49,15 @@ const Index = () => {
 
       {/* Category and Species toggles */}
       <div className="px-4 py-2">
-        <CategoryFunnelToggle />
-        <SpeciesToggle />
+        <CategoryFunnelToggle 
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          funnelList={funnelList}
+        />
+        <SpeciesToggle 
+          selectedSpecies={selectedSpecies}
+          setSelectedSpecies={setSelectedSpecies}
+        />
       </div>
 
       {/* Treatment List */}
@@ -52,13 +72,13 @@ const Index = () => {
             >
               <div className="flex items-center gap-4">
                 <img
-                  src={treatment.thumbnail}
+                  src="https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=100&h=100"
                   alt={treatment.name}
                   className="w-16 h-16 rounded-lg object-cover"
                 />
                 <div className="flex-1">
                   <h3 className="font-semibold text-gray-900">{treatment.name}</h3>
-                  <p className="text-sm text-gray-600 mt-1">{treatment.description}</p>
+                  <p className="text-sm text-gray-600 mt-1">{treatment.description[0]}</p>
                   <p className="text-lg font-bold text-gray-900 mt-2">{treatment.price}</p>
                 </div>
               </div>

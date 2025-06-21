@@ -15,6 +15,7 @@ export const TREATMENTS = [
     id: 1,
     name: "대형견 건강검진",
     price: "500,000원",
+    thumbnail: "https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=100&h=100",
     description: [
       "대형견 전용 건강검진입니다.",
       "25KG 이상일 경우 진료 진행이 가능합니다.",
@@ -48,6 +49,7 @@ export const TREATMENTS = [
     id: 2,
     name: "고양이 건강검진",
     price: "350,000원",
+    thumbnail: "https://images.unsplash.com/photo-1574144611937-0df059b5ef3e?auto=format&fit=crop&w=100&h=100",
     description: [
       "고양이 전용 건강검진입니다.",
     ],

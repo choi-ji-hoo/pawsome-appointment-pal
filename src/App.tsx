@@ -9,6 +9,9 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import TreatmentDetail from "./pages/TreatmentDetail";
 import HospitalDetail from "./pages/HospitalDetail";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import ReservationStatus from "./pages/ReservationStatus";
 
 // --- ScrollToTop 컴포넌트 추가 ---
 function ScrollToTop() {
@@ -29,6 +32,9 @@ const MainLayout = () => {
             <Route path="/" element={<Index />} />
             <Route path="/treatment/:id" element={<TreatmentDetail />} />
             <Route path="/hospital/:id" element={<HospitalDetail />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/status" element={<ReservationStatus />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
@@ -37,6 +43,8 @@ const MainLayout = () => {
     </div>
   );
 };
+
+const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -50,7 +58,5 @@ const App = () => (
     </TooltipProvider>
   </QueryClientProvider>
 );
-
-const queryClient = new QueryClient();
 
 export default App;

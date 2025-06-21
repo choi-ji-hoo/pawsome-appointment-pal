@@ -12,6 +12,7 @@ import HospitalDetail from "./pages/HospitalDetail";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ReservationStatus from "./pages/ReservationStatus";
+import ReservationDetail from "./pages/ReservationDetail";
 
 // --- ScrollToTop 컴포넌트 추가 ---
 function ScrollToTop() {
@@ -35,6 +36,7 @@ const MainLayout = () => {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/status" element={<ReservationStatus />} />
+            <Route path="/reservation/:id" element={<ReservationDetail />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>

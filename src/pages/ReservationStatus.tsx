@@ -131,7 +131,10 @@ const ReservationStatus = () => {
                   <span className="font-semibold text-gray-900">
                     {reservation.price}
                   </span>
-                  <button className="text-sm text-blue-600 hover:text-blue-800">
+                  <button 
+                    onClick={() => navigate(`/reservation/${reservation.id}`)}
+                    className="text-sm text-blue-600 hover:text-blue-800"
+                  >
                     상세보기
                   </button>
                 </div>

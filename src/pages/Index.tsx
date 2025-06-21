@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BannerCarousel from "@/components/BannerCarousel";
 import CategoryFunnelToggle from "@/components/CategoryFunnelToggle";
-import SpeciesToggle from "@/components/SpeciesToggle";
 import AuthButton from "@/components/AuthButton";
 import { Calendar } from "lucide-react";
 import { TREATMENTS } from "@/utils/constants";
@@ -12,9 +11,8 @@ const Index = () => {
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   
-  // Add state for category and species selection
+  // Add state for category selection
   const [selectedCategory, setSelectedCategory] = useState("all");
-  const [selectedSpecies, setSelectedSpecies] = useState("강아지");
 
   // Define funnel categories
   const funnelList = [
@@ -47,16 +45,12 @@ const Index = () => {
       {/* Banner */}
       <BannerCarousel />
 
-      {/* Category and Species toggles */}
+      {/* Category toggle only */}
       <div className="px-4 py-2">
         <CategoryFunnelToggle 
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
           funnelList={funnelList}
-        />
-        <SpeciesToggle 
-          selectedSpecies={selectedSpecies}
-          setSelectedSpecies={setSelectedSpecies}
         />
       </div>
 
@@ -72,7 +66,7 @@ const Index = () => {
             >
               <div className="flex items-center gap-4">
                 <img
-                  src="https://images.unsplash.com/photo-1576201836106-db1758fd1c97?auto=format&fit=crop&w=100&h=100"
+                  src={treatment.thumbnail}
                   alt={treatment.name}
                   className="w-16 h-16 rounded-lg object-cover"
                 />

@@ -15,6 +15,7 @@ export const TREATMENTS = [
     id: 1,
     name: "대형견 건강검진",
     price: "500,000원",
+    thumbnail: "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=400&q=80",
     description: [
       "대형견 전용 건강검진입니다.",
       "25KG 이상일 경우 진료 진행이 가능합니다.",
@@ -48,6 +49,7 @@ export const TREATMENTS = [
     id: 2,
     name: "고양이 건강검진",
     price: "350,000원",
+    thumbnail: "https://images.unsplash.com/photo-1472396961693-142e6e269027?auto=format&fit=crop&w=400&q=80",
     description: [
       "고양이 전용 건강검진입니다.",
     ],
@@ -76,4 +78,12 @@ export const TIMES = [
   "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
   "12:00", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30",
   "16:00", "16:30", "17:00", "17:30", "18:00"
+];
+
+export const FUNNEL_CATEGORIES = [
+  { label: "전체", value: "all", iconKey: "all" as const },
+  { label: "병원", value: "hospital", iconKey: "hospital" as const },
+  { label: "예방", value: "prevent", iconKey: "prevent" as const },
+  { label: "치과", value: "den", iconKey: "den" as const },
+  { label: "정형외과", value: "ortho", iconKey: "ortho" as const },
 ];

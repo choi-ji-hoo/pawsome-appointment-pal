@@ -1,16 +1,19 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BannerCarousel from "@/components/BannerCarousel";
 import CategoryFunnelToggle from "@/components/CategoryFunnelToggle";
 import SpeciesToggle from "@/components/SpeciesToggle";
 import AuthButton from "@/components/AuthButton";
 import { Calendar } from "lucide-react";
-import { TREATMENTS } from "@/utils/constants";
+import { TREATMENTS, FUNNEL_CATEGORIES } from "@/utils/constants";
 
 const Index = () => {
   const navigate = useNavigate();
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+  
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedSpecies, setSelectedSpecies] = useState("강아지");
 
   return (
     <div className="min-h-screen max-w-md w-full mx-auto bg-white">
@@ -36,8 +39,15 @@ const Index = () => {
 
       {/* Category and Species toggles */}
       <div className="px-4 py-2">
-        <CategoryFunnelToggle />
-        <SpeciesToggle />
+        <CategoryFunnelToggle 
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
+          funnelList={FUNNEL_CATEGORIES}
+        />
+        <SpeciesToggle 
+          selectedSpecies={selectedSpecies}
+          setSelectedSpecies={setSelectedSpecies}
+        />
       </div>
 
       {/* Treatment List */}
@@ -58,7 +68,7 @@ const Index = () => {
                 />
                 <div className="flex-1">
                   <h3 className="font-semibold text-gray-900">{treatment.name}</h3>
-                  <p className="text-sm text-gray-600 mt-1">{treatment.description}</p>
+                  <p className="text-sm text-gray-600 mt-1">{treatment.description[0]}</p>
                   <p className="text-lg font-bold text-gray-900 mt-2">{treatment.price}</p>
                 </div>
               </div>

@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import BannerCarousel from "@/components/BannerCarousel";
 import CategoryFunnelToggle, { FunnelCategory } from "@/components/CategoryFunnelToggle";
 import { Input } from "@/components/ui/input";
-import { Dog, Cat } from "lucide-react";
+import { Dog, Cat, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 // --- 카테고리 Funnel 정보 ---
 const FUNNEL_LIST: FunnelCategory[] = [
@@ -117,6 +118,7 @@ const Index = () => {
   const [selectedCategory, setSelectedCategory] = React.useState("dog");
   const [search, setSearch] = React.useState("");
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
 
   // 카테고리, 검색어에 따라 진료 필터링
   const filteredTreatments = React.useMemo(() => {
@@ -134,7 +136,36 @@ const Index = () => {
 
   return (
     <div className="bg-white min-h-screen max-w-md mx-auto flex flex-col relative pb-20 font-sans">
-      <header className="w-full pt-6 pb-0 px-4 flex flex-col gap-4">
+      <header className="w-full pt-4 pb-0 px-4 flex flex-col gap-3">
+        {/* 로그인/로그아웃 버튼 */}
+        <div className="flex items-center justify-between">
+          <div className="text-lg font-extrabold text-blue-900 tracking-tight">후디 동물병원</div>
+          {user ? (
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-gray-500 truncate max-w-[120px]">
+                {user.email}
+              </span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={signOut}
+                className="text-xs text-gray-500 hover:text-red-500 px-2 h-8"
+              >
+                로그아웃
+              </Button>
+            </div>
+          ) : (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate("/login")}
+              className="flex items-center gap-1 text-sm text-[#3E7BFA] hover:text-[#2E6BEA] px-3 h-9 rounded-xl border border-[#3E7BFA]/20 hover:bg-[#3E7BFA]/5"
+            >
+              <User size={16} />
+              로그인
+            </Button>
+          )}
+        </div>
         <div className="relative w-full">
           <Input
             placeholder="진료명, 항목명으로 검색"

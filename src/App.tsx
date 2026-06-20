@@ -9,6 +9,8 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import TreatmentDetail from "./pages/TreatmentDetail";
 import HospitalDetail from "./pages/HospitalDetail";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 
 // --- ScrollToTop 컴포넌트 추가 ---
 function ScrollToTop() {
@@ -27,6 +29,8 @@ const MainLayout = () => {
         <div className="w-full max-w-md bg-white flex flex-col flex-1 px-0 py-0">
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
             <Route path="/treatment/:id" element={<TreatmentDetail />} />
             <Route path="/hospital/:id" element={<HospitalDetail />} />
             <Route path="*" element={<NotFound />} />

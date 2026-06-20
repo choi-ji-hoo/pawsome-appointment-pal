@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Calendar, Syringe, HeartPulse, Bone, List } from "lucide-react";
+import { Dog, Cat } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export interface FunnelCategory {
@@ -10,11 +10,8 @@ export interface FunnelCategory {
 }
 
 const FUNNEL_ICONS: Record<string, React.ReactNode> = {
-  all: <List strokeWidth={2.1} size={32} />,
-  hospital: <Calendar strokeWidth={2.1} size={32} />,
-  prevent: <Syringe strokeWidth={2.1} size={32} />,
-  den: <HeartPulse strokeWidth={2.1} size={32} />,
-  ortho: <Bone strokeWidth={2.1} size={32} />,
+  dog: <Dog strokeWidth={2.1} size={32} />,
+  cat: <Cat strokeWidth={2.1} size={32} />,
 };
 
 interface CategoryFunnelToggleProps {

@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import BannerCarousel from "@/components/BannerCarousel";
 import CategoryFunnelToggle, { FunnelCategory } from "@/components/CategoryFunnelToggle";
 import { Input } from "@/components/ui/input";
-import { Dog, Cat } from "lucide-react";
+import { Dog, Cat, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 // --- 카테고리 Funnel 정보 ---
 const FUNNEL_LIST: FunnelCategory[] = [

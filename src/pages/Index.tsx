@@ -118,6 +118,7 @@ const Index = () => {
   const [selectedCategory, setSelectedCategory] = React.useState("dog");
   const [search, setSearch] = React.useState("");
   const navigate = useNavigate();
+  const { user, signOut } = useAuth();
 
   // 카테고리, 검색어에 따라 진료 필터링
   const filteredTreatments = React.useMemo(() => {

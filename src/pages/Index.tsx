@@ -3,17 +3,14 @@ import { useNavigate } from "react-router-dom";
 import BannerCarousel from "@/components/BannerCarousel";
 import CategoryFunnelToggle, { FunnelCategory } from "@/components/CategoryFunnelToggle";
 import { Input } from "@/components/ui/input";
-import { Calendar, Syringe, HeartPulse, Bone, List } from "lucide-react";
+import { Dog, Cat } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
-// --- 카테고리 Funnel 정보 (all 추가) ---
+// --- 카테고리 Funnel 정보 ---
 const FUNNEL_LIST: FunnelCategory[] = [
-  { label: "전체", iconKey: "all", value: "all" },
-  { label: "병원 예약", iconKey: "hospital", value: "hospital" },
-  { label: "예방의학", iconKey: "prevent", value: "prevent" },
-  { label: "치의학", iconKey: "den", value: "den" },
-  { label: "정형외과", iconKey: "ortho", value: "ortho" },
+  { label: "강아지", iconKey: "dog", value: "dog" },
+  { label: "고양이", iconKey: "cat", value: "cat" },
 ];
 
 // 진료(상품) 예시 데이터
@@ -21,7 +18,7 @@ const TREATMENTS = [
   {
     id: 1,
     name: "종합검진",
-    category: "hospital",
+    category: "dog",
     thumbnail: "https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?auto=format&fit=facearea&w=160&h=160",
     items: ["내과", "혈액·소변검사", "영상의학", "기초초음파", "피부·소양증"],
     hours: "월~금 9:00 - 18:00",
@@ -29,7 +26,7 @@ const TREATMENTS = [
   {
     id: 2,
     name: "예방접종/건강상담",
-    category: "prevent",
+    category: "dog",
     thumbnail: "https://images.unsplash.com/photo-1535268647677-300dbf3d78d1?auto=format&fit=facearea&w=160&h=160",
     items: ["백신접종", "구충", "정기상담"],
     hours: "월~토 9:30 - 18:00",
@@ -37,7 +34,7 @@ const TREATMENTS = [
   {
     id: 3,
     name: "치과진료",
-    category: "den",
+    category: "cat",
     thumbnail: "https://images.unsplash.com/photo-1466721591366-2d5fba72006d?auto=format&fit=facearea&w=160&h=160",
     items: ["스케일링", "발치", "치과상담"],
     hours: "매주 토요일 10:00 - 15:00",
@@ -45,16 +42,15 @@ const TREATMENTS = [
   {
     id: 4,
     name: "정형외과 진료",
-    category: "ortho",
+    category: "cat",
     thumbnail: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?auto=format&fit=facearea&w=160&h=160",
     items: ["수술", "재활치료"],
     hours: "월~금 10:00 - 19:00",
   },
-  // 기타 항목 추가 예시
   {
     id: 5,
     name: "특수동물 진료",
-    category: "hospital",
+    category: "dog",
     thumbnail: "https://images.unsplash.com/photo-1452378174528-3090a4bba7b2?auto=format&fit=facearea&w=160&h=160",
     items: ["토끼", "조류", "설치류"],
     hours: "예약제 (전화 문의)",
@@ -62,16 +58,14 @@ const TREATMENTS = [
 ];
 
 const Index = () => {
-  const [selectedCategory, setSelectedCategory] = React.useState("all");
+  const [selectedCategory, setSelectedCategory] = React.useState("dog");
   const [search, setSearch] = React.useState("");
   const navigate = useNavigate();
 
   // 카테고리, 검색어에 따라 진료 필터링
   const filteredTreatments = React.useMemo(() => {
     let list = TREATMENTS;
-    if (selectedCategory !== "all") {
-      list = list.filter(t => t.category === selectedCategory);
-    }
+    list = list.filter(t => t.category === selectedCategory);
     if (search.trim()) {
       list = list.filter(
         t =>

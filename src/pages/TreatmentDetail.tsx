@@ -16,6 +16,15 @@ const TreatmentDetail = () => {
   const treatment = TREATMENTS.find(t => t.id === Number(id)) || TREATMENTS[0];
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 
+  const drawerTreatment = React.useMemo(
+    () => ({
+      id: treatment.id,
+      name: treatment.name,
+      price: treatment.price,
+    }),
+    [treatment]
+  );
+
   return (
     <div className="relative min-h-screen max-w-md w-full mx-auto bg-white pb-28">
       {/* Top Header */}
@@ -102,7 +111,7 @@ const TreatmentDetail = () => {
       <ReservationDrawer
         open={drawerOpen}
         onOpenChange={setDrawerOpen}
-        treatment={treatment}
+        treatment={drawerTreatment}
       />
     </div>
   );

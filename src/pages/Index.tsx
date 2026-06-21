@@ -142,9 +142,12 @@ const Index = () => {
           <div className="text-lg font-extrabold text-blue-900 tracking-tight">후디 동물병원</div>
           {user ? (
             <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-500 truncate max-w-[120px]">
+              <button
+                onClick={() => navigate("/reservations")}
+                className="text-xs text-gray-600 hover:text-blue-700 truncate max-w-[120px] underline decoration-gray-300 hover:decoration-blue-700 underline-offset-2"
+              >
                 {user.email}
-              </span>
+              </button>
               <Button
                 variant="ghost"
                 size="sm"

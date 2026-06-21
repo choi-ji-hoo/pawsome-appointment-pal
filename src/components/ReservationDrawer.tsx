@@ -14,12 +14,26 @@ interface ReservationDrawerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   treatment: {
+    id?: number;
     name: string;
     price: string;
   };
 }
 
 const stepLabels = ["옵션", "날짜·시간", "보호자정보", "완료"];
+
+function saveReservation(data: object) {
+  try {
+    const existing = JSON.parse(localStorage.getItem("reservations") || "[]");
+    if (!Array.isArray(existing)) {
+      localStorage.setItem("reservations", JSON.stringify([data]));
+      return;
+    }
+    localStorage.setItem("reservations", JSON.stringify([data, ...existing]));
+  } catch {
+    localStorage.setItem("reservations", JSON.stringify([data]));
+  }
+}
 
 const ReservationDrawer: React.FC<ReservationDrawerProps> = ({
   open,
@@ -36,11 +50,34 @@ const ReservationDrawer: React.FC<ReservationDrawerProps> = ({
   const [petWeight, setPetWeight] = React.useState("");
   const formatPhoneNumber = useFormatPhoneNumber();
 
-  // 예약 완료 처리: 확인 누르면 예약현황 페이지로 이동
+  // 예약 완료 처리: 저장 후 예약내역 페이지로 이동
   function handleToStatus() {
+    const reservation = {
+      id: crypto.randomUUID?.() || Date.now().toString(),
+      treatmentId: treatment.id,
+      treatmentName: treatment.name,
+      treatmentPrice: treatment.price,
+      option,
+      date: date ? date.toISOString() : undefined,
+      time,
+      guardianName,
+      guardianPhone,
+      petName,
+      petWeight,
+      createdAt: new Date().toISOString(),
+      userEmail: (() => {
+        try {
+          const session = JSON.parse(localStorage.getItem("sb-ppttrsdapijeoygzzyxr-auth-token") || "{}");
+          return session?.user?.email || "";
+        } catch {
+          return "";
+        }
+      })(),
+    };
+    saveReservation(reservation);
     onOpenChange(false);
     setTimeout(() => {
-      window.location.href = "/status";
+      window.location.href = "/reservations";
     }, 350);
   }
 
@@ -48,6 +85,7 @@ const ReservationDrawer: React.FC<ReservationDrawerProps> = ({
     e.preventDefault();
     setStep(s => s + 1);
   }
+
 
   React.useEffect(() => {
     if (!open) {

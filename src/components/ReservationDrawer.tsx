@@ -2,6 +2,7 @@
 import * as React from "react";
 import { Drawer, DrawerContent } from "@/components/ui/drawer";
 import { useFormatPhoneNumber } from "@/hooks/useFormatPhoneNumber";
+import { supabase } from "@/integrations/supabase/client";
 import { OPTIONS, TIMES } from "@/utils/constants";
 import StepIndicator from "./reservation/StepIndicator";
 import StepOptionSelector from "./reservation/StepOptionSelector";

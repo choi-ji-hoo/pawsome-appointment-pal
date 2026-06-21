@@ -52,7 +52,8 @@ const ReservationDrawer: React.FC<ReservationDrawerProps> = ({
   const formatPhoneNumber = useFormatPhoneNumber();
 
   // 예약 완료 처리: 저장 후 예약내역 페이지로 이동
-  function handleToStatus() {
+  async function handleToStatus() {
+    const { data: userData } = await supabase.auth.getUser();
     const reservation = {
       id: crypto.randomUUID?.() || Date.now().toString(),
       treatmentId: treatment.id,
@@ -66,14 +67,7 @@ const ReservationDrawer: React.FC<ReservationDrawerProps> = ({
       petName,
       petWeight,
       createdAt: new Date().toISOString(),
-      userEmail: (() => {
-        try {
-          const session = JSON.parse(localStorage.getItem("sb-ppttrsdapijeoygzzyxr-auth-token") || "{}");
-          return session?.user?.email || "";
-        } catch {
-          return "";
-        }
-      })(),
+      userEmail: userData.user?.email || "",
     };
     saveReservation(reservation);
     onOpenChange(false);

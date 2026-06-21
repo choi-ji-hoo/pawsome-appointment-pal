@@ -2,6 +2,7 @@ import * as React from "react";
 import { useNavigate } from "react-router-dom";
 import { Calendar, Clock, Phone, User, Dog, Weight, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Reservation {
   id: string;
@@ -17,15 +18,6 @@ interface Reservation {
   petWeight: string;
   createdAt: string;
   userEmail: string;
-}
-
-function getCurrentUserEmail(): string {
-  try {
-    const session = JSON.parse(localStorage.getItem("sb-ppttrsdapijeoygzzyxr-auth-token") || "{}");
-    return session?.user?.email || "";
-  } catch {
-    return "";
-  }
 }
 
 function loadReservations(): Reservation[] {
@@ -49,7 +41,7 @@ function formatDate(dateStr?: string) {
 
 const Reservations = () => {
   const navigate = useNavigate();
-  const userEmail = getCurrentUserEmail();
+  const [userEmail, setUserEmail] = React.useState<string>("");
   const allReservations = React.useMemo(() => loadReservations(), []);
   const reservations = React.useMemo(
     () =>
@@ -61,6 +53,12 @@ const Reservations = () => {
         ),
     [allReservations, userEmail]
   );
+
+  React.useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => {
+      setUserEmail(data.user?.email || "");
+    });
+  }, []);
 
   return (
     <div className="min-h-screen max-w-md mx-auto bg-white flex flex-col">

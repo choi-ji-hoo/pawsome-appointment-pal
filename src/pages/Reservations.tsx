@@ -20,12 +20,58 @@ interface Reservation {
   userEmail: string;
 }
 
+const SAMPLE_RESERVATIONS: Reservation[] = [
+  {
+    id: "sample-1",
+    treatmentName: "강아지 종합백신 (DHPPL)",
+    treatmentPrice: "35,000원",
+    option: "5종 종합백신 1차",
+    date: new Date(Date.now() + 3 * 86400000).toISOString(),
+    time: "오전 10:30",
+    guardianName: "김보호",
+    guardianPhone: "010-1234-5678",
+    petName: "초코",
+    petWeight: "4.2",
+    createdAt: new Date(Date.now() - 1 * 86400000).toISOString(),
+    userEmail: "",
+  },
+  {
+    id: "sample-2",
+    treatmentName: "고양이 건강검진 패키지",
+    treatmentPrice: "120,000원",
+    option: "혈액검사 + 복부초음파",
+    date: new Date(Date.now() + 7 * 86400000).toISOString(),
+    time: "오후 2:00",
+    guardianName: "이집사",
+    guardianPhone: "010-9876-5432",
+    petName: "나비",
+    petWeight: "3.8",
+    createdAt: new Date(Date.now() - 3 * 86400000).toISOString(),
+    userEmail: "",
+  },
+  {
+    id: "sample-3",
+    treatmentName: "강아지 스케일링",
+    treatmentPrice: "250,000원",
+    option: null,
+    date: new Date(Date.now() - 5 * 86400000).toISOString(),
+    time: "오전 11:00",
+    guardianName: "박반려",
+    guardianPhone: "010-2222-3333",
+    petName: "뽀삐",
+    petWeight: "6.5",
+    createdAt: new Date(Date.now() - 10 * 86400000).toISOString(),
+    userEmail: "",
+  },
+];
+
 function loadReservations(): Reservation[] {
   try {
     const raw = JSON.parse(localStorage.getItem("reservations") || "[]");
-    return Array.isArray(raw) ? raw : [];
+    const stored = Array.isArray(raw) ? raw : [];
+    return [...stored, ...SAMPLE_RESERVATIONS];
   } catch {
-    return [];
+    return [...SAMPLE_RESERVATIONS];
   }
 }
 

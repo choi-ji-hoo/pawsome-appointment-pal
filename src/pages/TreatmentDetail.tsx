@@ -111,7 +111,7 @@ const TreatmentDetail = () => {
       <ReservationDrawer
         open={drawerOpen}
         onOpenChange={setDrawerOpen}
-        treatment={treatment}
+        treatment={drawerTreatment}
       />
     </div>
   );
